@@ -20,12 +20,12 @@ function Map() {
                 defaultZoom={14}
                 margin={[50, 50, 50, 50]}
                 // options={{}}
-                // onChange={() => {
-                //     console.log('Map on change')
-                // }}
-                // onChildClick={() => {
-                //     console.log('Map on Child Click')
-                // }}
+                onChange={() => {
+                    console.log('Map on change')
+                }}
+                onChildClick={() => {
+                    console.log('Map on Child Click')
+                }}
             >
                 <div>
                     Hello
@@ -36,33 +36,33 @@ function Map() {
     );
 }
 
-// export default Map;
-
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
-
-export default function SimpleMap(){
-    const defaultProps = {
-        center: {
-            lat: 10.99835602,
-            lng: 77.01502627
-        },
-        zoom: 11
-    };
-
-    return (
-        // Important! Always set the container height explicitly
-        <div style={{ height: '100vh', width: '100%' }}>
-            <GoogleMapReact
-                bootstrapURLKeys={{ key: "AIzaSyAOhDQsllY-qrUfADq17g2WBAHKb8BR3As" }}
-                defaultCenter={defaultProps.center}
-                defaultZoom={defaultProps.zoom}
-            >
-                <AnyReactComponent
-                    lat={59.955413}
-                    lng={30.337844}
-                    text="My Marker"
-                />
-            </GoogleMapReact>
-        </div>
-    );
-}
+export default Map;
+//
+// const AnyReactComponent = ({ text }) => <div>{text}</div>;
+//
+// export default function SimpleMap(){
+//     const defaultProps = {
+//         center: {
+//             lat: 10.99835602,
+//             lng: 77.01502627
+//         },
+//         zoom: 11
+//     };
+//
+//     return (
+//         // Important! Always set the container height explicitly
+//         <div style={{ height: '100vh', width: '100%' }}>
+//             <GoogleMapReact
+//                 bootstrapURLKeys={{ key: "AIzaSyAOhDQsllY-qrUfADq17g2WBAHKb8BR3As" }}
+//                 defaultCenter={defaultProps.center}
+//                 defaultZoom={defaultProps.zoom}
+//             >
+//                 <AnyReactComponent
+//                     lat={59.955413}
+//                     lng={30.337844}
+//                     text="My Marker"
+//                 />
+//             </GoogleMapReact>
+//         </div>
+//     );
+// }
