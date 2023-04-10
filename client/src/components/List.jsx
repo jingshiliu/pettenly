@@ -9,7 +9,7 @@ const StyledList = styled.div`
 `;
 
 
-function List(props) {
+function List() {
 
     const [type, setType] = useState('restaurants');
     const [rating, setRating] = useState(0);

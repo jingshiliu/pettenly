@@ -1,12 +1,12 @@
 import {Autocomplete} from '@react-google-maps/api'
 import styled from "styled-components";
 import {AiOutlineSearch} from 'react-icons/ai'
-import googleMapCredential from '../credentials/googleMapCredential.json'
+import googleMapCredential from '../credentials/google_map_credential.json'
 
 const StyledHeader = styled.header`
   padding: 0 10%;
   background-color: ${({theme}) => theme.colors.blue};
-  height: 5vh;
+  height: 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;

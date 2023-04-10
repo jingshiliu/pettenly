@@ -5,10 +5,10 @@ const StyledDiv = styled.div`
     
 `;
 
-function PlaceDetails(props) {
+function PlaceDetails({place}) {
     return (
         <StyledDiv>
-            Place Details
+            {place.name}
         </StyledDiv>
     );
 }

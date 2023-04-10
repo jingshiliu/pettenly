@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import styled, {ThemeProvider} from "styled-components";
 import Header from "./components/Header.jsx";
 import List from "./components/List.jsx";
 import Map from "./components/Map.jsx";
+
+import {mockPlaceData} from "./tempPlace.js";
+import {getPlaceData} from "./api/index.js";
 
 const theme = {
     colors: {
@@ -23,13 +26,45 @@ const StyledApp = styled.div`
 
 
 function App() {
+    const [places, setPlaces] = useState(mockPlaceData)
+    const [coordinates, setCoordinates] = useState({})
+    const [bound, setBound] = useState({});
+
+
+    useEffect(()=>{
+        navigator.geolocation.getCurrentPosition(({coords: {latitude, longitude}})=>{
+            setCoordinates({lat: latitude, lng: longitude})
+        })
+
+    }, [])
+
+    useEffect(()=>{
+
+        let timeId = setTimeout(()=>{
+            getPlaceData(bound)
+                .then(data =>{
+                    console.log(places)
+                    setPlaces(data)
+                })
+        }, 1000)
+
+        return ()=>{
+            clearTimeout(timeId)
+        }
+    }, [bound, coordinates])
+
+
     return (
         <ThemeProvider theme={theme}>
             <StyledApp>
                 <Header/>
                 <main>
                     <List/>
-                    <Map/>
+                    <Map
+                        setCoordinates={setCoordinates}
+                        setBound={setBound}
+                        coordinates={coordinates}
+                    />
                 </main>
             </StyledApp>
         </ThemeProvider>
