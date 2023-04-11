@@ -24,10 +24,7 @@ function Map({coordinates, setCoordinates, setBound}) {
                         lat: e.center.lat,
                         lng: e.center.lng
                     })
-                    setBound({
-                        bl: e.bounds.sw,
-                        tr: e.bounds.ne
-                    })
+                    setBound(e.bounds)
                 }}
                 onChildClick={() => {
                     console.log('Map on Child Click')

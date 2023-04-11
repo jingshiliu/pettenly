@@ -39,13 +39,13 @@ function App() {
     }, [])
 
     useEffect(()=>{
-
         let timeId = setTimeout(()=>{
-            getPlaceData(bound)
-                .then(data =>{
-                    console.log(places)
-                    setPlaces(data)
-                })
+            console.log(bound)
+            console.log(places)
+            // getPlaceData(bound.ne, bound.sw)
+            //     .then(data =>{
+            //         setPlaces(data)
+            //     })
         }, 1000)
 
         return ()=>{
@@ -59,7 +59,7 @@ function App() {
             <StyledApp>
                 <Header/>
                 <main>
-                    <List/>
+                    <List places={places}/>
                     <Map
                         setCoordinates={setCoordinates}
                         setBound={setBound}
