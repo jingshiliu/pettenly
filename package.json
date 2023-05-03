@@ -1,22 +1,27 @@
 {
-  "name": "ctp-spring-project",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jingshiliu/ctp-spring-project.git"
-  },
-  "author": "Jingshi Liu and Anthony Duran",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jingshiliu/ctp-spring-project/issues"
-  },
-  "homepage": "https://github.com/jingshiliu/ctp-spring-project#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "@react-google-maps/api": "^2.17.1",
+    "axios": "^1.3.4",
+    "google-map-react": "^2.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.8.0",
+    "react-is": "^18.2.0",
+    "styled-components": "^5.3.9"
+  },
+  "devDependencies": {
+    "@types/react": "^16.14.37",
+    "@types/react-dom": "^18.0.11",
+    "@vitejs/plugin-react": "^3.1.0",
+    "vite": "^4.2.0"
   }
 }
