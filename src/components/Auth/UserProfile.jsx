@@ -2,17 +2,9 @@ import React from 'react';
 import {signOut} from "firebase/auth";
 import {auth} from "../../config/firebase.js";
 
-function UserProfile({setIsLoggedIn}) {
+function UserProfile({logout}) {
 
-    async function logout(){
-        try{
-            await signOut(auth)
-            setIsLoggedIn(false)
-        }catch (err){
-            console.error(err)
-        }
-        console.log('signing out...')
-    }
+
 
     return (
         <div>
