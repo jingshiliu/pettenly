@@ -1,8 +1,9 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {createContext, useContext, useEffect, useRef, useState} from 'react';
 import styled, {ThemeProvider} from "styled-components";
 import Header from "./components/Header.jsx";
 import List from "./components/List.jsx";
 import Map from "./components/Map.jsx";
+import {auth} from "./config/firebase.js";
 
 
 const theme = {
@@ -29,8 +30,14 @@ const StyledApp = styled.div`
 `;
 
 
-function App() {
+export const AppContext = createContext({
+    isLoggedIn: false,
+    setIsLoggedIn: () => {}
+})
 
+
+function App() {
+    const [isLoggedIn, setIsLoggedIn] = useState(Boolean(auth?.currentUser))
     const [coordinates, setCoordinates] = useState({})
     const [bound, setBound] = useState({});
 
@@ -55,17 +62,19 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <StyledApp>
-                <Header/>
-                <main>
-                    <List />
-                    <Map
-                        setCoordinates={setCoordinates}
-                        setBound={setBound}
-                        coordinates={coordinates}
-                    />
-                </main>
-            </StyledApp>
+            <AppContext.Provider  value={{isLoggedIn, setIsLoggedIn}}>
+                <StyledApp>
+                    <Header/>
+                    <main>
+                        <List />
+                        <Map
+                            setCoordinates={setCoordinates}
+                            setBound={setBound}
+                            coordinates={coordinates}
+                        />
+                    </main>
+                </StyledApp>
+            </AppContext.Provider>
         </ThemeProvider>
     )
 }
