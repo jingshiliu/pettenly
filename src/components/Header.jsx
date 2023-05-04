@@ -17,7 +17,7 @@ const StyledHeader = styled.header`
     font-weight: normal;
   }
 
-  div:nth-child(2){
+  .searchContainer{
     display: flex;
     align-items: center;
   }
@@ -68,7 +68,7 @@ function Header() {
                 Pettenly
             </div>
 
-            <div>
+            <div className={'searchContainer'}>
                 <h4>
                     Explore Pets
                 </h4>
