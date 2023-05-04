@@ -4,8 +4,6 @@ import Header from "./components/Header.jsx";
 import List from "./components/List.jsx";
 import Map from "./components/Map.jsx";
 
-import {mockPlaceData} from "./tempPlace.js";
-import {getPlaceData} from "./api/index.js";
 
 const theme = {
     colors: {
@@ -18,15 +16,21 @@ const StyledApp = styled.div`
   width: 100vw;
 
   main{
-    display: grid;
-    grid-template-columns: 1fr 3fr;
+    position: relative;
+    
     height: 95vh;
+    
+    .List{
+      width: 25%;
+      height: 100%;
+      position: absolute;
+    }
   }
 `;
 
 
 function App() {
-    const [places, setPlaces] = useState(mockPlaceData)
+
     const [coordinates, setCoordinates] = useState({})
     const [bound, setBound] = useState({});
 
@@ -35,17 +39,12 @@ function App() {
         navigator.geolocation.getCurrentPosition(({coords: {latitude, longitude}})=>{
             setCoordinates({lat: latitude, lng: longitude})
         })
-
     }, [])
 
     useEffect(()=>{
         let timeId = setTimeout(()=>{
             console.log(bound)
-            console.log(places)
-            // getPlaceData(bound.ne, bound.sw)
-            //     .then(data =>{
-            //         setPlaces(data)
-            //     })
+
         }, 1000)
 
         return ()=>{
@@ -59,7 +58,7 @@ function App() {
             <StyledApp>
                 <Header/>
                 <main>
-                    <List places={places}/>
+                    <List />
                     <Map
                         setCoordinates={setCoordinates}
                         setBound={setBound}
