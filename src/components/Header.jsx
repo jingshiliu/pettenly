@@ -1,7 +1,7 @@
-import {Autocomplete} from '@react-google-maps/api'
 import styled from "styled-components";
 import {AiOutlineSearch} from 'react-icons/ai'
-import googleMapCredential from '../credentials/google_map_credential.json'
+import UserAuth from "./Auth/UserAuth.jsx";
+
 
 const StyledHeader = styled.header`
   padding: 0 10%;
@@ -11,6 +11,7 @@ const StyledHeader = styled.header`
   justify-content: space-between;
   align-items: center;
   color: #1b263b;
+  overflow: visible;
   
   h4{
     font-weight: normal;
@@ -19,7 +20,6 @@ const StyledHeader = styled.header`
   div:nth-child(2){
     display: flex;
     align-items: center;
-    justify-content: space-between;
   }
   
   .Autocomplete{
@@ -53,18 +53,24 @@ const StyledHeader = styled.header`
     font-size: 20px;
     border-right:1px solid ${({theme}) => theme.colors.blue};
   }
+  
+  .UserAuth{
+    position: absolute;
+    right: 5em;
+
+  }
 `;
 
-function Header(props) {
+function Header() {
     return (
         <StyledHeader>
             <div className={'icon'}>
-                Travel Advisor
+                Pettenly
             </div>
 
             <div>
                 <h4>
-                    Explore new places
+                    Explore Pets
                 </h4>
 
                 <div className="Autocomplete">
@@ -77,14 +83,11 @@ function Header(props) {
                     </div>
                 </div>
 
-                {/*<Autocomplete className={'Autocomplete'}>*/}
-                {/*    <div className={'search'}>*/}
-                {/*        <AiOutlineSearch className={'searchIcon'}/>*/}
+                <UserAuth />
 
-                {/*        <input placeholder={'Search...'} />*/}
-                {/*    </div>*/}
-                {/*</Autocomplete>*/}
             </div>
+
+
         </StyledHeader>
     );
 }
