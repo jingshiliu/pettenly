@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import {auth, googleAuthProvider} from '../../config/firebase.js'
 import {AppContext} from "../../App.jsx";
 
@@ -66,6 +66,7 @@ function UserAuth() {
 
     return (
         <StyledUserAuth className={'UserAuth'}>
+            <button onClick={logout}>Sign out</button>
             {
                  isLoggedIn ?
                     <UserProfile logout={logout}  />
