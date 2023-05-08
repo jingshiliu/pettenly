@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import SignInCard from "./SignInCard.jsx";
 import styled from "styled-components";
 
 const StyledSignIn = styled.div`
