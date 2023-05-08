@@ -1,9 +1,14 @@
-import React, {createContext, useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled, {ThemeProvider} from "styled-components";
+
+import AuthContextProvider from "./context/AuthContext.jsx";
+
 import Header from "./components/Header.jsx";
 import List from "./components/List.jsx";
 import Map from "./components/Map.jsx";
 import {auth} from "./config/firebase.js";
+import PostCreateButton from "./components/PostCreation/PostCreateButton.jsx";
+import PostCreator from "./components/PostCreation/PostCreator.jsx";
 
 
 const theme = {
@@ -30,14 +35,10 @@ const StyledApp = styled.div`
 `;
 
 
-export const AppContext = createContext({
-    isLoggedIn: false,
-    setIsLoggedIn: () => {}
-})
+
 
 
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState(Boolean(auth?.currentUser))
     const [coordinates, setCoordinates] = useState({})
     const [bound, setBound] = useState({});
 
@@ -62,19 +63,21 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <AppContext.Provider  value={{isLoggedIn, setIsLoggedIn}}>
+            <AuthContextProvider>
                 <StyledApp>
                     <Header/>
                     <main>
-                        <List />
                         <Map
                             setCoordinates={setCoordinates}
                             setBound={setBound}
                             coordinates={coordinates}
                         />
+
+                        <List />
+                        <PostCreateButton onClickInvokedUI={<PostCreator />}/>
                     </main>
                 </StyledApp>
-            </AppContext.Provider>
+            </AuthContextProvider>
         </ThemeProvider>
     )
 }

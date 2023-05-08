@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {auth, googleAuthProvider} from '../../config/firebase.js'
-import {AppContext} from "../../App.jsx";
+import {AuthContext} from "../../context/AuthContext.jsx";
 
 import styled from "styled-components";
 import SignIn from "./SignIn.jsx";
@@ -13,7 +13,7 @@ const StyledUserAuth = styled.div`
 `
 
 function UserAuth() {
-    const {isLoggedIn, setIsLoggedIn} = useContext(AppContext)
+    const {isLoggedIn, setIsLoggedIn} = useContext(AuthContext)
 
     console.log(auth?.currentUser?.email)
 
