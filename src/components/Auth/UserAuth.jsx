@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
-import {auth, googleAuthProvider} from '../../config/firebase.js'
+import {auth, db, googleAuthProvider} from '../../config/firebase.js'
+import {setDoc, doc, getDoc} from "firebase/firestore";
 import {AuthContext} from "../../context/AuthContext.jsx";
 
 import styled from "styled-components";
@@ -30,11 +31,12 @@ function UserAuth() {
         }
     }
 
-    async function createAccount(email, password){
+    async function createAccount(email, password, username){
         try{
             console.log('Creating Account')
             await createUserWithEmailAndPassword(auth, email, password)
             console.log('Created User and Signed In')
+            await createUserObject(username)
             setIsLoggedIn(true)
         }catch (err){
             console.error(err)
@@ -47,6 +49,7 @@ function UserAuth() {
             console.log('Signing in with Google')
             await signInWithPopup(auth, googleAuthProvider)
             console.log('Signed in with Google')
+            await createUserObject('',true)
             setIsLoggedIn(true)
         }catch (err){
             console.error(err)
@@ -62,6 +65,21 @@ function UserAuth() {
             console.error(err)
         }
         console.log('signing out...')
+    }
+
+
+    async function createUserObject(username, isGoogle=false){
+        const id = auth?.currentUser?.uid
+        if(isGoogle){
+            const userSnapshot = await getDoc(doc(db, "user", id))
+            if(userSnapshot.exists())
+                return
+            username = auth?.currentUser?.displayName
+        }
+
+        await setDoc(doc(db, "user", id), {
+            username,
+        })
     }
 
     return (
