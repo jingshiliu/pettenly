@@ -9,7 +9,8 @@ const StyledMap = styled.div`
     width: 100%;
 `;
 
-function Map({coordinates, setCoordinates, setBound}) {
+function Map({coordinates, setCoordinates, setBound, children}) {
+    console.log(children)
     return (
         <StyledMap>
             <GoogleMapReact
@@ -30,7 +31,7 @@ function Map({coordinates, setCoordinates, setBound}) {
                     console.log('Map on Child Click')
                 }}
             >
-
+                {children}
 
             </GoogleMapReact>
         </StyledMap>
