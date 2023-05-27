@@ -18,6 +18,9 @@ const theme = {
     colors: {
         blue: '#a2d2ff',
         black: '#2b2d42',
+        deepGreenBlue: '#0077b6',
+        greenBlue: '#00b4d8',
+        lightGreen: '#caf0f8'
     }
 }
 
@@ -29,7 +32,7 @@ const StyledApp = styled.div`
   main {
     position: relative;
 
-    height: 95vh;
+    height: inherit;
 
     .List {
       width: 25%;
