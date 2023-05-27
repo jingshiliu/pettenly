@@ -26,7 +26,7 @@ const StyledHeader = styled.header`
     display: flex;
   }
   
-  input{
+  #searchBar{
     border: none;
     font-size: 14px;
     padding: 4px 6px;
@@ -34,7 +34,7 @@ const StyledHeader = styled.header`
     background-color: transparent;
   }
   
-  input:focus-visible{
+  #searchBar:focus-visible{
     outline: none;
   }
   
@@ -79,7 +79,7 @@ function Header() {
                             <AiOutlineSearch />
                         </div>
 
-                        <input placeholder={'Search...'} />
+                        <input id={'searchBar'} placeholder={'Search...'} />
                     </div>
                 </div>
 
