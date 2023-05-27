@@ -14,7 +14,7 @@ const StyledPostCreator = styled.div`
   border-radius: 2em;
   transform: translateX(-50px);
 `
-function PostCreator({}) {
+function PostCreator({getPosts}) {
     const [adoptable, setAdoptable] = useState(true)
     const [petName, setPetName] = useState('')
     const [petImage, setPetImage] = useState(null)
@@ -48,6 +48,7 @@ function PostCreator({}) {
                 postCreator: auth?.currentUser?.uid,
                 price
             })
+            getPosts()
             alert('Post created')
         }catch (e) {
             console.error(e)
