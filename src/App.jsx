@@ -1,14 +1,18 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import styled, {ThemeProvider} from "styled-components";
+import {collection, getDocs} from "firebase/firestore"
+import {db} from "./config/firebase.js";
 
-import AuthContextProvider from "./context/AuthContext.jsx";
+import {AuthContext} from "./context/AuthContext.jsx";
 
 import Header from "./components/Header.jsx";
 import List from "./components/List.jsx";
 import Map from "./components/Map.jsx";
-import {auth} from "./config/firebase.js";
-import PostCreateButton from "./components/PostCreation/PostCreateButton.jsx";
-import PostCreator from "./components/PostCreation/PostCreator.jsx";
+import PostCreateButton from "./components/Post/PostCreateButton.jsx";
+import PostCreator from "./components/Post/PostCreator.jsx";
+import PostPreview from "./components/Post/PostPreview.jsx";
+import PostDetail from "./components/Post/PostDetail.jsx";
+
 
 
 const theme = {
@@ -20,6 +24,7 @@ const theme = {
 const StyledApp = styled.div`
   height: 100vh;
   width: 100vw;
+  overflow: hidden;
 
   main{
     position: relative;
@@ -34,24 +39,27 @@ const StyledApp = styled.div`
   }
 `;
 
-
-
-
-
 function App() {
     const [coordinates, setCoordinates] = useState({})
     const [bound, setBound] = useState({});
+    const [posts, setPosts] = useState([])
+    const [displayingPost, setDisplayingPost] = useState(undefined)
 
-
+    const {isLoggedIn} = useContext(AuthContext)
+    
     useEffect(()=>{
         navigator.geolocation.getCurrentPosition(({coords: {latitude, longitude}})=>{
             setCoordinates({lat: latitude, lng: longitude})
         })
+        getPosts()
     }, [])
+
+    useEffect(() => {
+        setDisplayingPost(undefined)
+    }, [isLoggedIn])
 
     useEffect(()=>{
         let timeId = setTimeout(()=>{
-            console.log(bound)
 
         }, 1000)
 
@@ -60,10 +68,23 @@ function App() {
         }
     }, [bound, coordinates])
 
+    async function getPosts(){
+        try{
+            const data = await getDocs(collection(db, "post"))
+            const postList = data.docs.map(doc =>({
+                ...doc.data(),
+                id: doc.id
+            }))
+            setPosts(postList)
+            console.log(postList)
+        }catch (e){
+            console.error(e)
+        }
+    }
+
 
     return (
         <ThemeProvider theme={theme}>
-            <AuthContextProvider>
                 <StyledApp>
                     <Header/>
                     <main>
@@ -71,13 +92,26 @@ function App() {
                             setCoordinates={setCoordinates}
                             setBound={setBound}
                             coordinates={coordinates}
-                        />
+                        >
+                            {posts.map((post) =>{
+                                return <PostPreview post={post}
+                                                    setDisplayingPost={setDisplayingPost}
+                                                    lat={post.location.latitude}
+                                                    lng={post.location.longitude}
+                                                    key={post.id}
+                                />
+                                }
+                                )
+                            }
+                        </Map>
 
                         <List />
-                        <PostCreateButton onClickInvokedUI={<PostCreator />}/>
+                        <PostCreateButton onClickInvokedUI={<PostCreator getPosts={getPosts} />}/>
+                        {
+                            displayingPost && <PostDetail post={displayingPost}/>
+                        }
                     </main>
                 </StyledApp>
-            </AuthContextProvider>
         </ThemeProvider>
     )
 }
