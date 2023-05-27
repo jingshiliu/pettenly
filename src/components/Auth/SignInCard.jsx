@@ -5,6 +5,8 @@ import {MdOutlineMail} from 'react-icons/md';
 import {RiLockPasswordLine} from 'react-icons/ri';
 import {FiUser} from 'react-icons/fi';
 
+import Icon from '../Icon.jsx'
+
 const StyledSignInCard = styled.div`
   // center at the window
   position: fixed;
@@ -21,10 +23,16 @@ const StyledSignInCard = styled.div`
   justify-content: space-evenly;
   border-radius: 1em;
   padding: 2em;
+  opacity: 1;
 
   h2 {
     text-align: center;
     font-weight: 300;
+    
+    .Icon{
+      margin-right: 10px;
+      color: #00b4d8;
+    }
   }
 
   label {
@@ -76,17 +84,17 @@ const StyledSignInCard = styled.div`
       }
       
       .loginButton:first-child{
-        background-color: #0077b6;
+        background-color: ${({theme}) => theme.colors.deepGreenBlue};
       }
 
       .loginButton:last-child{
-        background-color: #00b4d8;
+        background-color: ${({theme}) => theme.colors.greenBlue};
       }
     }
     
     .second-row{
       .loginButton{
-        background-color: #caf0f8;
+        background-color: ${({theme}) => theme.colors.lightGreen};
       }
     }
 
@@ -131,6 +139,7 @@ function SignInCard({logIn, createAccount, signInWithGoogle}) {
     return (
         <StyledSignInCard>
             <h2>
+                <Icon />
                 {
                     isCreatingAccount ? 'Sign In' : 'Log In'
                 }
