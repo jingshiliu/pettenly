@@ -1,10 +1,11 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import styled from "styled-components";
 import {collection, addDoc, GeoPoint} from 'firebase/firestore'
 
 import {db, auth} from "../../config/firebase.js";
 import {AuthContext} from "../../context/AuthContext.jsx";
 
+import {uploadFile} from "../../utils/index.js";
 
 
 const StyledPostCreator = styled.div`
@@ -24,6 +25,10 @@ function PostCreator({getPosts}) {
     const [description, setDescription] = useState('')
     const {isLoggedIn} = useContext(AuthContext)
 
+    useEffect(()=>{
+        getCurrentLocation()
+    }, [])
+
     function getCurrentLocation(){
         alert("Getting current location, might take some time. Let's wait...")
         navigator.geolocation.getCurrentPosition(({coords: {latitude, longitude}})=>{
@@ -39,12 +44,14 @@ function PostCreator({getPosts}) {
         }
 
         try{
+            const path = await uploadFile(petImage)
+            console.log(path)
             await addDoc(collection(db, "post"), {
                 adoptable,
                 description,
                 location: new GeoPoint(lat, lng),
                 petName,
-                petImage,
+                petImage: path,
                 postCreator: auth?.currentUser?.uid,
                 price
             })
