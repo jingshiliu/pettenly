@@ -1,17 +1,56 @@
 import styled from "styled-components";
 import {AiOutlineSearch} from 'react-icons/ai'
 import UserAuth from "./Auth/UserAuth.jsx";
+import Icon from "./Icon.jsx";
 
 
 const StyledHeader = styled.header`
-  padding: 0 10%;
-  background-color: ${({theme}) => theme.colors.blue};
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
   height: 50px;
   display: flex;
+  
   justify-content: space-between;
   align-items: center;
-  color: #1b263b;
   overflow: visible;
+  
+  .mainHeaderContainer{
+    border-radius: 1em;
+    height: inherit;
+    padding: 0 10%;
+    background-color: ${({theme}) => theme.colors.deepGreenBlue};
+    opacity: 0.95;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .icon{
+      width: 100px;
+      color: ${({theme}) => theme.colors.lightGreen};
+      
+      .Icon{
+        margin-right: 8px;
+      }
+    }
+  }
+  
+  .authContainer{
+    width: 50px;
+    height: 50px;
+    background-color: ${({theme}) => theme.colors.deepGreenBlue};
+    margin-left: 5px;
+    border-radius: 0.6em;
+    
+    
+    .UserAuth{
+      width: inherit;
+      height: inherit;
+      
+    }
+  }
   
   h4{
     font-weight: normal;
@@ -44,7 +83,7 @@ const StyledHeader = styled.header`
     align-items: center;
     background-color: #fff;
     padding: 4px 6px;
-    border-radius: 4px;
+    border-radius: 0.6em;
   }
   
   .search .searchIcon{
@@ -54,39 +93,35 @@ const StyledHeader = styled.header`
     border-right:1px solid ${({theme}) => theme.colors.blue};
   }
   
-  .UserAuth{
-    position: absolute;
-    right: 5em;
 
-  }
 `;
 
 function Header() {
     return (
         <StyledHeader>
-            <div className={'icon'}>
-                Pettenly
-            </div>
-
-            <div className={'searchContainer'}>
-                <h4>
-                    Explore Pets
-                </h4>
-
-                <div className="Autocomplete">
-                    <div className={'search'}>
-                        <div className={'searchIcon'}>
-                            <AiOutlineSearch />
-                        </div>
-
-                        <input id={'searchBar'} placeholder={'Search...'} />
-                    </div>
+            <div className="mainHeaderContainer">
+                <div className={'icon'}>
+                    <Icon />
+                    Pettenly
                 </div>
 
-                <UserAuth />
+                <div className={'searchContainer'}>
+                    <div className="Autocomplete">
+                        <div className={'search'}>
+                            <div className={'searchIcon'}>
+                                <AiOutlineSearch />
+                            </div>
 
+                            <input id={'searchBar'} placeholder={'Search...'} />
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
+            <div className="authContainer">
+                <UserAuth />
+            </div>
 
         </StyledHeader>
     );
