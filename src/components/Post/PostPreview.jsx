@@ -33,10 +33,9 @@ function PostPreview({setDisplayingPost, post}) {
         setImageUrl(url)
     }
 
-
-    const handleOnClick = isLoggedIn ? () => setDisplayingPost(post) : null;
+    const handleOnClick = isLoggedIn && setDisplayingPost ? () => setDisplayingPost(post) : null;
     return (
-        <StyledPostPreview onClick={handleOnClick}>
+        <StyledPostPreview className={'PostPreview'} onClick={handleOnClick}>
             {
                 imageUrl ?
                     <img src={imageUrl} alt="preview photo of post that is a pet"/>
