@@ -11,7 +11,6 @@ const StyledMap = styled.div`
 `;
 
 function Map({coordinates, setCoordinates, setBound, children}) {
-    console.log(children)
     return (
         <StyledMap>
             <GoogleMapReact
