@@ -29,7 +29,7 @@ function PostDetail({post}) {
             await addDoc(collection(db, "appointment"), {
                 from: auth.currentUser.uid,
                 to: post.postCreator,
-                time: appointmentTime
+                time: Timestamp.fromDate(appointmentTime)
             })
             alert("Appointment Made")
         }catch (e){
