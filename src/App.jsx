@@ -20,7 +20,10 @@ const theme = {
         black: '#2b2d42',
         deepGreenBlue: '#0077b6',
         greenBlue: '#00b4d8',
-        lightGreen: '#caf0f8'
+        lightGreen: '#caf0f8',
+        deepGreenBlue2: '#01497c',
+        lightGreen2: '#89c2d9',
+        green: '#2ec4b6',
     }
 }
 
