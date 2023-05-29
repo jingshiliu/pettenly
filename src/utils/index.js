@@ -1,5 +1,5 @@
 import {nanoid} from "nanoid";
-import {ref, getDownloadURL, uploadBytes} from 'firebase/storage';
+import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
 import {storage} from "../config/firebase.js";
 
 export function fireStorageFilePostfix(){
@@ -9,9 +9,7 @@ export function fireStorageFilePostfix(){
 export async function getImageFromStorage(imagePath) {
     try {
         const storageRef = ref(storage, imagePath);
-        const downloadURL = await getDownloadURL(storageRef);
-        console.log("Image download URL:", downloadURL);
-        return downloadURL
+        return await getDownloadURL(storageRef)
     } catch (error) {
         console.error("Error getting image from storage:", error);
     }
