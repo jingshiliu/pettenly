@@ -8,13 +8,12 @@ const StyledPostPreview = styled.div`
   width: 50px;
   height: 50px;
   background-color: ${({theme}) => theme.colors.greenBlue};
-  object-fit: contain;
+  object-fit: cover;
   overflow: hidden;
   
   border-radius: 1em;
   
   img{
-    width: inherit;
     height: inherit;
   }
 `
