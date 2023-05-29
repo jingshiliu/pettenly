@@ -5,6 +5,7 @@ import {nanoid} from "nanoid";
 import {FiCheck} from 'react-icons/fi'
 import {doc, getDoc, query, where, orderBy, collection, getDocs, updateDoc} from "firebase/firestore";
 import {db, auth} from "../../config/firebase.js";
+import {getImageFromStorage, uploadFile} from "../../utils/index.js";
 
 const StyledAppointmentUI = styled.div`
   width: 100%;
@@ -61,7 +62,7 @@ const StyledAppointmentUI = styled.div`
 
 function AppointmentUI({appointment}) {
     const [isConfirmed, setIsConfirmed] = useState(appointment.status === 'confirmed')
-    console.log(appointment)
+
     async function confirmAppointment(){
         try {
             const apptRef = doc(db, 'appointment', appointment.id)
@@ -73,14 +74,19 @@ function AppointmentUI({appointment}) {
         }catch (e) {
             console.error(e)
         }
+    }
+    // 6 - 23 10:45
+    function formatTime(time){
+        time = new Date(time)
 
+        return `${time.getMonth()}-${time.getDate()} ${time.getHours()}:${time.getMinutes()}`
     }
 
     return (
         <StyledAppointmentUI>
             <div className={'title'}>
                 <span>{appointment.petName}</span>
-                <span>{appointment.time}</span>
+                <span>{formatTime(appointment.time)}</span>
                 <span>{appointment.name}</span>
             </div>
 
@@ -128,6 +134,7 @@ const StyledUserProfile = styled.div`
   padding: 20px;
   color: ${({theme}) => theme.colors.lightGreen};
   overflow: hidden;
+  opacity: 0.94;
   
   .row{
     width: 100%;
@@ -159,10 +166,24 @@ const StyledUserProfile = styled.div`
     border-radius: 20%;
     object-fit: contain;
     overflow: hidden;
+    position: relative;
     
     img{
       width: inherit;
       height: inherit;
+      object-fit: cover;
+    }
+    
+    img:hover{
+      cursor: pointer;
+    }
+    
+    input{
+      width: 100%;
+      height: 150%;
+      position: absolute;
+      left: 0;
+      top: -50%;
     }
   }
   
@@ -312,16 +333,25 @@ function UserProfile() {
     const [appointments, setAppointments] = useState([])
 
     useEffect(()=>{
+        loadData()
+    }, [])
+
+    function loadData(){
         getUser()
         getPosts()
         getAppointments()
-    }, [])
+    }
 
     async function getUser(){
 
         try{
             const userDoc = await getDoc(doc(db, 'user', auth?.currentUser?.uid))
-            setUser(userDoc.data())
+            const userData = userDoc.data()
+            const profilePhotoUrl = await getImageFromStorage(userData.image)
+            setUser({
+                ...userData,
+                image: profilePhotoUrl
+            })
         }catch (e){
             console.error(e)
         }
@@ -355,16 +385,34 @@ function UserProfile() {
         try {
             const appts = await getDocs(query(
                 collection(db, 'appointment'),
-                where('to', '==', auth?.currentUser?.uid)
+                where('to', '==', auth?.currentUser?.uid),
+                orderBy('time', 'desc')
             ))
 
             const apptsData = []
             for(let appt of appts.docs)
                 apptsData.push({
                     ...appt.data(),
-                    id: appt.id
+                    id: appt.id,
+                    time: appt.data().time.toDate()
                 })
             setAppointments(apptsData)
+        }catch (e) {
+            console.error(e)
+        }
+    }
+
+    async function uploadProfilePhoto(image){
+        // uploadPhoto
+        // upload user doc
+        // refresh
+        console.log("image")
+        try {
+            const path = await uploadFile(image, 'profile')
+            await updateDoc(doc(db, 'user', auth?.currentUser?.uid),{
+                image: path
+            })
+            loadData()
         }catch (e) {
             console.error(e)
         }
@@ -375,7 +423,10 @@ function UserProfile() {
         <StyledUserProfile>
             <div className="row first-row">
                 <div className={'profilePhotoContainer'}>
-                    <img src={userProfile.image} alt=""/>
+                    <img src={user.image} alt=""/>
+                    <input type="file"
+                           onChange={e => uploadProfilePhoto(e.target.files[0])}
+                    />
                 </div>
 
                 <div>
