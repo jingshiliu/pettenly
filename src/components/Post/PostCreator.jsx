@@ -10,10 +10,11 @@ import {uploadFile} from "../../utils/index.js";
 
 const StyledPostCreator = styled.div`
   background-color: #fff;
-  width: 500px;
+  width: 400px;
   height: 700px;
-  border-radius: 2em;
-  transform: translateX(-50px);
+  padding: 20px;
+  border-radius: 1.4em;
+  background-color: ${({theme}) => theme.colors.deepGreenBlue};
 `
 function PostCreator({getPosts}) {
     const [adoptable, setAdoptable] = useState(true)

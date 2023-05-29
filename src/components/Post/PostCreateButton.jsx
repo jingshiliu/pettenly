@@ -1,42 +1,47 @@
 import React, {useContext, useState} from 'react';
 import styled from "styled-components";
 import {AuthContext} from "../../context/AuthContext.jsx";
+import {ListContext} from "../../context/ListContext.js";
 
 import {BsPlusLg} from "react-icons/bs"
 
 const StyledPostCreateButton = styled.div`
-  position: fixed;
-  right: 20px;
-  top: 150px;
   display: flex;
   flex-direction: column;
+  margin-left: 10px;
+  
   
   .postCreateButton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     align-self: end;
-    font-size: 30px;  
-    width: 2em;
-    height: 2em;
-    background-color: red;
-    border-radius: 50%;
+    font-size: 30px;
+    width: 200px;
+    height: 50px;
+    background-color: ${({theme}) => theme.colors.deepGreenBlue2};
+    border-radius: 0.6em;
     line-height: 0;
-    color: white;
+    color: ${({theme}) => theme.colors.lightGreen};
+    
+    span{
+      font-size: 20px;
+    }
   }
 `
 
 function PostCreateButton({onClickInvokedUI}) {
-    const [isCreatingPost, setIsCreatingPost] = useState(false)
     const {isLoggedIn} = useContext(AuthContext)
+    const {addToTheList} = useContext(ListContext)
     return (
         <StyledPostCreateButton>
             {
                 isLoggedIn && (
                     <>
-                        <button className={'postCreateButton'} onClick={() => setIsCreatingPost(!isCreatingPost)}>
+                        <button className={'postCreateButton'} onClick={() => addToTheList(onClickInvokedUI)}>
                             <BsPlusLg />
+                            <span>Create Post</span>
                         </button>
-                        {
-                            isCreatingPost && onClickInvokedUI
-                        }
                     </>
                 )
             }

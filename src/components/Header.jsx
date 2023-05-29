@@ -2,6 +2,9 @@ import styled from "styled-components";
 import {AiOutlineSearch} from 'react-icons/ai'
 import UserAuth from "./Auth/UserAuth.jsx";
 import Icon from "./Icon.jsx";
+import PostCreator from "./Post/PostCreator.jsx";
+import PostCreateButton from "./Post/PostCreateButton.jsx";
+import React from "react";
 
 
 const StyledHeader = styled.header`
@@ -96,7 +99,7 @@ const StyledHeader = styled.header`
 
 `;
 
-function Header() {
+function Header({additonalChildren}) {
     return (
         <StyledHeader>
             <div className="mainHeaderContainer">
@@ -122,6 +125,8 @@ function Header() {
             <div className="authContainer">
                 <UserAuth />
             </div>
+
+            {additonalChildren}
 
         </StyledHeader>
     );

@@ -4,14 +4,17 @@ import {collection, getDocs} from "firebase/firestore"
 import {auth, db} from "./config/firebase.js";
 
 import {AuthContext} from "./context/AuthContext.jsx";
+import {ListContext} from "./context/ListContext.js";
 
 import Header from "./components/Header.jsx";
-import List from "./components/List.jsx";
+import List from "./components/List/List.jsx";
 import Map from "./components/Map.jsx";
 import PostCreateButton from "./components/Post/PostCreateButton.jsx";
 import PostCreator from "./components/Post/PostCreator.jsx";
 import PostPreview from "./components/Post/PostPreview.jsx";
 import PostDetail from "./components/Post/PostDetail.jsx";
+import ListCard from "./components/List/ListCard.jsx";
+import {nanoid} from "nanoid";
 
 
 const theme = {
@@ -49,16 +52,17 @@ function App() {
     const [coordinates, setCoordinates] = useState({})
     const [bound, setBound] = useState({});
     const [posts, setPosts] = useState([])
-    const [displayingPost, setDisplayingPost] = useState(undefined)
+    const [selectedPost, setSelectedPost] = useState(undefined)
+    const [theList, setTheList] = useState([])
 
     const {isLoggedIn, setIsLoggedIn} = useContext(AuthContext)
 
     // syncing auth state and isLoggedIn with this piece of code is genius
-    if (Boolean(auth?.currentUser) !== isLoggedIn){
+    if (Boolean(auth?.currentUser) !== isLoggedIn) {
         setIsLoggedIn(Boolean(auth?.currentUser))
     }
 
-    console.log(auth)
+
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(({coords: {latitude, longitude}}) => {
             setCoordinates({lat: latitude, lng: longitude})
@@ -67,7 +71,7 @@ function App() {
     }, [])
 
     useEffect(() => {
-        setDisplayingPost(undefined)
+        setSelectedPost(undefined)
     }, [isLoggedIn])
 
     useEffect(() => {
@@ -94,36 +98,50 @@ function App() {
         }
     }
 
+    function createListRemoveFunction(index) {
+        return function removeFromTheList() {
+            setTheList([
+                ...theList.slice(0, index),
+                ...theList.slice(index + 1)
+            ])
+        }
+    }
+
+    function addToTheList(component){
+        setTheList([...theList, component])
+    }
+
+    console.log(theList)
 
     return (
         <ThemeProvider theme={theme}>
-            <StyledApp>
-                <Header/>
-                <main>
-                    <Map
-                        setCoordinates={setCoordinates}
-                        setBound={setBound}
-                        coordinates={coordinates}
-                    >
-                        {posts.map((post) => {
+            <ListContext.Provider value={{addToTheList}}>
+                <StyledApp>
+                    <Header additonalChildren={<PostCreateButton onClickInvokedUI={<PostCreator getPosts={getPosts}/>}/>}/>
+                    <main>
+                        <Map
+                            setCoordinates={setCoordinates}
+                            setBound={setBound}
+                            coordinates={coordinates}
+                        >
+                            {posts.map((post) => {
                                 return <PostPreview post={post}
-                                                    setDisplayingPost={setDisplayingPost}
+                                                    setDisplayingPost={setSelectedPost}
                                                     lat={post.location.latitude}
                                                     lng={post.location.longitude}
                                                     key={post.id}
-                                />
-                            }
-                        )
-                        }
-                    </Map>
+                                />})}
+                        </Map>
 
-                    <List/>
-                    <PostCreateButton onClickInvokedUI={<PostCreator getPosts={getPosts}/>}/>
-                    {
-                        displayingPost && <PostDetail post={displayingPost}/>
-                    }
-                </main>
-            </StyledApp>
+                        <List>
+                            {theList.map((listElement, index) =>
+                                <ListCard key={nanoid()}
+                                          removeFromTheList={createListRemoveFunction(index)}
+                                >{listElement}</ListCard>)}
+                        </List>
+                    </main>
+                </StyledApp>
+            </ListContext.Provider>
         </ThemeProvider>
     )
 }

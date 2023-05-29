@@ -1,24 +1,17 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import UserProfile from "./UserProfile.jsx";
+import ListCard from "../List/ListCard.jsx";
 
+import {ListContext} from "../../context/ListContext.js";
 
 function UserProfilePreview({logout}) {
-    const [shouldInvokeUserProfileUI, setShouldInvokeUserProfileUI] = useState(true)
-
-
+    const {addToTheList} = useContext(ListContext)
     return (
         <div>
-            <button onClick={() => setShouldInvokeUserProfileUI(!shouldInvokeUserProfileUI)}>Profile</button>
+            <button onClick={()=> addToTheList(<UserProfile />)}>Profile</button>
             <button onClick={logout}>Log out</button>
-
-            {
-                shouldInvokeUserProfileUI ?
-                    <UserProfile />
-                    :
-                    <></>
-            }
         </div>
-    );
+    )
 }
 
 export default UserProfilePreview;

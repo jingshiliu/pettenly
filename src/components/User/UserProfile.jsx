@@ -129,8 +129,6 @@ const StyledUserProfile = styled.div`
   border-radius: 1.4em;
   background-color: ${({theme}) => theme.colors.deepGreenBlue};
   z-index: 1;
-  position: absolute;
-  left: 0;
   padding: 20px;
   color: ${({theme}) => theme.colors.lightGreen};
   overflow: hidden;
@@ -249,85 +247,6 @@ const StyledUserProfile = styled.div`
 `
 
 function UserProfile() {
-    const userProfile = {
-        image: "https://firebasestorage.googleapis.com/v0/b/pettenly.appspot.com/o/PostImage%2F0.webpvuLLuKFO7y1qBJ3nMG05T?alt=media&token=a5a050a0-f416-4901-a227-9221c55606c0",
-        email: 'gmail@helloworld.com',
-        name: "Mr Asir",
-        appointments: [
-            {
-                from: "bZhM701orDcqDYGNSa9gtQs4Fjg1",
-                to: "v1PLcKwsPxcfrETFyu7krrgfgRG3",
-                status: "pending",
-                time: "2023-05-12T19:41",
-                post: '',
-                name: "Jingshi",
-                message: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum modi obcaecati rem quidem placeat repudiandae provident molestias vitae repellendus architecto, officia aliquid! Reprehenderit, culpa error facilis vitae perspiciatis debitis repellat ipsum dolore id blanditiis nulla quam quo aut ratione, illum possimus consectetur ducimus hic porro numquam facere optio esse modi.'
-            },
-            {
-                from: "bZhM701orDcqDYGNSa9gtQs4Fjg1",
-                to: "v1PLcKwsPxcfrETFyu7krrgfgRG3",
-                status: "pending",
-                time: "2023-05-12T19:41",
-                post: '',
-                name: "Haolin",
-                message: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum modi obcaecati rem quidem placeat repudiandae provident molestias vitae repellendus architecto, officia aliquid! Reprehenderit, culpa error facilis vitae perspiciatis debitis repellat ipsum dolore id blanditiis nulla quam quo aut ratione, illum possimus consectetur ducimus hic porro numquam facere optio esse modi.'
-            }
-        ],
-        posts: [
-            {
-                description: "",
-                petName: "Doudou",
-                postCreator: "bZhM701orDcqDYGNSa9gtQs4Fjg1",
-                price: 0,
-                adoptable: true,
-                petImage: "PostImage/0.webpvuLLuKFO7y1qBJ3nMG05T",
-                location: {
-                    latitude: 40.74507764291969,
-                    longitude: -73.8318063477433
-                },
-                "id": "GPy8yiCTXBH2NHnheZdt"
-            },{
-                description: "",
-                petName: "Doudou",
-                postCreator: "bZhM701orDcqDYGNSa9gtQs4Fjg1",
-                price: 0,
-                adoptable: true,
-                petImage: "PostImage/0.webpvuLLuKFO7y1qBJ3nMG05T",
-                location: {
-                    latitude: 40.74507764291969,
-                    longitude: -73.8318063477433
-                },
-                "id": "GPy8yiCTXBH2NHnheZdt"
-            },
-            {
-                description: "",
-                petName: "Doudou",
-                postCreator: "bZhM701orDcqDYGNSa9gtQs4Fjg1",
-                price: 0,
-                adoptable: true,
-                petImage: "PostImage/0.webpvuLLuKFO7y1qBJ3nMG05T",
-                location: {
-                    latitude: 40.74507764291969,
-                    longitude: -73.8318063477433
-                },
-                "id": "GPy8yiCTXBH2NHnheZdt"
-            },
-            {
-                description: "",
-                petName: "Doudou",
-                postCreator: "bZhM701orDcqDYGNSa9gtQs4Fjg1",
-                price: 0,
-                adoptable: true,
-                petImage: "PostImage/0.webpvuLLuKFO7y1qBJ3nMG05T",
-                location: {
-                    latitude: 40.74507764291969,
-                    longitude: -73.8318063477433
-                },
-                "id": "GPy8yiCTXBH2NHnheZdt"
-            },
-        ]
-    }
-
     const [user, setUser] = useState({})
     const [posts, setPosts] = useState([])
     const [appointments, setAppointments] = useState([])
