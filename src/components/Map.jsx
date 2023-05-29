@@ -2,6 +2,7 @@ import React from 'react';
 import GoogleMapReact from 'google-map-react'
 import googleMapCredential from '../credentials/google_map_credential.json'
 import styled from "styled-components";
+import mapStyle from "../MapStyle.js";
 
 
 const StyledMap = styled.div`
@@ -19,7 +20,7 @@ function Map({coordinates, setCoordinates, setBound, children}) {
                 center={coordinates}
                 defaultZoom={14}
                 margin={[50, 50, 50, 50]}
-                // options={{}}
+                options={mapStyle}
                 onChange={(e) => {
                     setCoordinates({
                         lat: e.center.lat,
