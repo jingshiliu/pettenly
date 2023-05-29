@@ -5,7 +5,7 @@ import {AuthContext} from "../../context/AuthContext.jsx";
 
 import styled from "styled-components";
 import SignIn from "./SignIn.jsx";
-import UserProfile from "./UserProfile.jsx";
+import UserProfilePreview from "../User/UserProfilePreview.jsx";
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut} from "firebase/auth";
 import SignInCard from "./SignInCard.jsx";
 
@@ -79,6 +79,7 @@ function UserAuth() {
 
         await setDoc(doc(db, "user", id), {
             username,
+            email: auth?.currentUser?.email
         })
     }
 
@@ -87,7 +88,7 @@ function UserAuth() {
             <button onClick={logout}>Sign out</button>
             {
                  isLoggedIn ?
-                    <UserProfile logout={logout}  />
+                    <UserProfilePreview logout={logout}  />
                     :
                      <SignIn>
                          <SignInCard logIn={logIn}
