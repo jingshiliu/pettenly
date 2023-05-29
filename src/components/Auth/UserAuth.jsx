@@ -15,9 +15,6 @@ const StyledUserAuth = styled.div`
 
 function UserAuth() {
     const {isLoggedIn, setIsLoggedIn} = useContext(AuthContext)
-
-    console.log(auth?.currentUser?.email)
-
     async function logIn(email, password){
         try{
             console.log('login in...')
@@ -79,7 +76,8 @@ function UserAuth() {
 
         await setDoc(doc(db, "user", id), {
             username,
-            email: auth?.currentUser?.email
+            email: auth?.currentUser?.email,
+            image: 'PostImage/0.webpvuLLuKFO7y1qBJ3nMG05T'
         })
     }
 
