@@ -30,7 +30,6 @@ function PostCreator({getPosts}) {
     }, [])
 
     function getCurrentLocation(){
-        alert("Getting current location, might take some time. Let's wait...")
         navigator.geolocation.getCurrentPosition(({coords: {latitude, longitude}})=>{
             setLat(latitude)
             setLng(longitude)
