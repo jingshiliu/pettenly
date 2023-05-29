@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import styled from "styled-components";
-import {collection, addDoc, GeoPoint} from 'firebase/firestore'
+import {collection, addDoc, GeoPoint, Timestamp} from 'firebase/firestore'
 
 import {db, auth} from "../../config/firebase.js";
 import {AuthContext} from "../../context/AuthContext.jsx";
@@ -45,7 +45,7 @@ function PostCreator({getPosts}) {
 
         try{
             const path = await uploadFile(petImage)
-            console.log(path)
+
             await addDoc(collection(db, "post"), {
                 adoptable,
                 description,
@@ -53,7 +53,8 @@ function PostCreator({getPosts}) {
                 petName,
                 petImage: path,
                 postCreator: auth?.currentUser?.uid,
-                price
+                price,
+                createdAt: Timestamp.now()
             })
             getPosts()
             alert('Post created')
