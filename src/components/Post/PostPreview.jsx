@@ -5,8 +5,8 @@ import {getImageFromStorage} from "../../utils/index.js";
 
 
 const StyledPostPreview = styled.div`
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   background-color: ${({theme}) => theme.colors.greenBlue};
   object-fit: cover;
   overflow: hidden;
