@@ -10,22 +10,21 @@ const StyledMap = styled.div`
     width: 100%;
 `;
 
-function Map({coordinates, setCoordinates, setBound, children}) {
+function Map({centerCoordinate, setCenterCoordinate, children}) {
     return (
-        <StyledMap>
+        <StyledMap className={'Map'}>
             <GoogleMapReact
                 bootstrapURLKeys={{key: googleMapCredential.apiKey}}
                 defaultCenter={{lat: 0, lng: 0}}
-                center={coordinates}
+                center={centerCoordinate}
                 defaultZoom={14}
                 margin={[50, 50, 50, 50]}
                 options={mapStyle}
                 onChange={(e) => {
-                    setCoordinates({
+                    setCenterCoordinate({
                         lat: e.center.lat,
                         lng: e.center.lng
                     })
-                    setBound(e.bounds)
                 }}
                 onChildClick={() => {
                     console.log('Map on Child Click')
