@@ -1,7 +1,9 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import styled from "styled-components";
 import {AuthContext} from "../../context/AuthContext.jsx";
 import {getImageFromStorage} from "../../utils/index.js";
+import {ListContext} from "../../context/ListContext.js";
+import PostDetail from "./PostDetail.jsx";
 
 
 const StyledPostPreview = styled.div`
@@ -18,9 +20,10 @@ const StyledPostPreview = styled.div`
   }
 `
 
-function PostPreview({setDisplayingPost, post}) {
+function PostPreview({post}) {
     const [imageUrl, setImageUrl] = useState('')
     const {isLoggedIn} = useContext(AuthContext)
+    const {addToTheList} = useContext(ListContext)
 
     useEffect(()=>{
         getImage()
@@ -32,7 +35,12 @@ function PostPreview({setDisplayingPost, post}) {
         setImageUrl(url)
     }
 
-    const handleOnClick = isLoggedIn && setDisplayingPost ? () => setDisplayingPost(post) : null;
+    function handleOnClick(){
+        if (! isLoggedIn)
+            return
+
+        addToTheList(<PostDetail post={post}/>, true)
+    }
     return (
         <StyledPostPreview className={'PostPreview'} onClick={handleOnClick}>
             {
