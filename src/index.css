@@ -12,6 +12,6 @@ button{
     cursor: pointer;
 }
 
-input:focus-visible{
+input:focus-visible, textarea:focus-visible{
     outline: none;
 }
