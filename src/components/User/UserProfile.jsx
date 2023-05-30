@@ -124,8 +124,8 @@ function AppointmentUI({appointment}) {
 
 
 const StyledUserProfile = styled.div`
-  width: 400px;
-  height: 700px;
+  width: 19vw;
+  height: 75vh;
   border-radius: 1.4em;
   background-color: ${({theme}) => theme.colors.deepGreenBlue};
   z-index: 1;
