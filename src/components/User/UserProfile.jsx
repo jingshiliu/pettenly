@@ -172,16 +172,34 @@ const StyledUserProfile = styled.div`
       object-fit: cover;
     }
     
-    img:hover{
-      cursor: pointer;
-    }
-    
     input{
       width: 100%;
       height: 150%;
       position: absolute;
       left: 0;
       top: -50%;
+      z-index: 1;
+    }
+    
+    span{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateY(-50%) translateX(-50%);
+      visibility: hidden;
+      
+    }
+  }
+
+  .profilePhotoContainer:hover{
+    cursor: pointer;
+    
+    img{
+      filter: brightness(0.6);
+    }
+    
+    span{ 
+      visibility: visible;
     }
   }
   
@@ -218,6 +236,8 @@ const StyledUserProfile = styled.div`
       }
     }
   }
+
+  
   
   .third-row{
     h3{
@@ -346,6 +366,8 @@ function UserProfile() {
                     <input type="file"
                            onChange={e => uploadProfilePhoto(e.target.files[0])}
                     />
+
+                    <span>Upload</span>
                 </div>
 
                 <div>
