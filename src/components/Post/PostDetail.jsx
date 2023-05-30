@@ -1,25 +1,134 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import styled from "styled-components";
 import {addDoc, collection, Timestamp} from "firebase/firestore";
 
 import {auth, db} from "../../config/firebase.js";
-import {AuthContext} from "../../context/AuthContext.jsx";
+import {getImageFromStorage} from "../../utils/index.js";
 
 const StyledPostDetail = styled.div`
-  width: 400px;
-  height: 300px;
-  position: fixed;
-  left: 50px;
-  top: 100px;
-  background-color: red;
+  width: 19vw;
+  height: 34.8vh;
+  position: relative;
+  background-color: ${({theme}) => theme.colors.deepGreenBlue};
+  color: ${({theme}) => theme.colors.lightGreen};
+  padding: 20px;
+  opacity: 0.94;
+  border-radius: 1.4em;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  
+  .petImageContainer{
+    width: 100%;
+    height: 70%;
+    border-radius: 0.6em;
+    overflow: hidden;
+    
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  
+  .postDescriptionContainer{
+    margin-top: 0.5em;
+    
+    hr{
+      border: none;
+      border-bottom: 1px solid ${({theme}) => theme.colors.lightGreen2};
+    }
+    p{
+      font-size: 15px;
+      font-weight: 200;
+      padding: 0.2em 0.4em;
+
+      @media (max-width: 1200px){
+        font-size: 12px;
+      }
+      @media (max-width: 1000px){
+        font-size: 10px;
+      }
+      @media (max-width: 700px){
+        font-size: 7px;
+      }
+    }
+  }
+  
+  .appointmentContainer{
+    margin-top: 0.6em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: 1700px) {
+      flex-direction: column;
+
+      button{
+        margin-top: 5px;
+        width: 100%;
+      }
+
+      label{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+    
+    button{
+      border-radius: 0.6em;
+      padding: 0.5em 1em;
+      background-color: ${({theme}) => theme.colors.lightGreen2};
+      color: ${({theme}) => theme.colors.deepGreenBlue2};
+    }
+    
+    button:hover{
+      filter: brightness(0.94);
+    }
+    
+    input[type="datetime-local"]{
+      border: none;
+      border-radius: 0.4em;
+      background-color: ${({theme}) => theme.colors.lightGreen};
+      padding: 0.2em 0.5em;
+    }
+  }
+  
 `
 
 function PostDetail({post}) {
     const [appointmentTime, setAppointmentTime] = useState(Date.now())
-    const {isLoggedIn} = useContext(AuthContext)
+    const [petImage, setPetImage] = useState(null)
+
     const {adoptable, price, description} = post
 
-    if(!isLoggedIn) return null
+    useEffect(()=>{
+        const loadPetImage = async ()=>{
+            setPetImage(await getImageFromStorage(post.petImage))
+        }
+        loadPetImage()
+    }, [])
+
+    post = {
+        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum modi obcaecati rem quidem placeat repudiandae provident molestias vitae repellendus architecto",
+        "petImage": "PostImage/cute-pet-names.pngtjvnkZVacNto6SiunSHaF",
+        "createdAt": {
+            "seconds": 1685331173,
+            "nanoseconds": 917000000
+        },
+        "location": {
+            "latitude": 40.740552,
+            "longitude": -73.808123
+        },
+        "petName": "Abiu",
+        "adoptable": true,
+        "postCreator": "bZhM701orDcqDYGNSa9gtQs4Fjg1",
+        "price": 0,
+        "id": "NFyhThuanXOK6oybluyb"
+    }
+
+
     async function makeAppointment() {
         if(auth?.currentUser?.uid === post.postCreator){
             alert('Cannot make an appointment to yourself')
@@ -39,29 +148,31 @@ function PostDetail({post}) {
 
     return (
         <StyledPostDetail>
-            <div>
-                Pet Image
+            <div className={'petImageContainer'}>
+                <img src={petImage} alt=""/>
             </div>
-            {adoptable ? (
-                <>
-                    <span>Adoptable</span>
-                </>) : (<label>
-                Price: {price}
-                </label>)}
 
-            <label>
-                Description: {description}
-            </label>
+            <div className={'postDescriptionContainer'}>
+                <label htmlFor="">
+                    {post.petName}'s intro
+                    <hr/>
+                    <p>
+                        {post.description}
+                    </p>
+                </label>
+            </div>
 
-            <label>
-                Choose a time:
-                <input type="datetime-local"
-                       value={appointmentTime}
-                       onChange={e => setAppointmentTime(e.target.value)}
-                />
-            </label>
+            <div className="appointmentContainer">
+                <label>
+                    Time:
+                    <input type="datetime-local"
+                           value={appointmentTime}
+                           onChange={e => setAppointmentTime(e.target.value)}
+                    />
+                </label>
 
-            <button onClick={makeAppointment}>Make a appointment</button>
+                <button onClick={makeAppointment}>Make a appointment</button>
+            </div>
         </StyledPostDetail>
     );
 }
