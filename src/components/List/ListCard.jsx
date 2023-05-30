@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import styled from "styled-components";
 import {VscChromeClose} from 'react-icons/vsc'
 
@@ -25,7 +25,6 @@ const StyledListCard = styled.div`
   }
 `
 function ListCard({removeFromTheList, children}) {
-
     return (
         <StyledListCard className={'ListCard'}>
             {children}

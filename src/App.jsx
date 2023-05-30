@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import styled, {ThemeProvider} from "styled-components";
 import {collection, getDocs} from "firebase/firestore"
 import {auth, db} from "./config/firebase.js";
@@ -12,9 +12,9 @@ import Map from "./components/Map.jsx";
 import PostCreateButton from "./components/Post/PostCreateButton.jsx";
 import PostCreator from "./components/Post/PostCreator.jsx";
 import PostPreview from "./components/Post/PostPreview.jsx";
-import PostDetail from "./components/Post/PostDetail.jsx";
 import ListCard from "./components/List/ListCard.jsx";
 import {nanoid} from "nanoid";
+import DoubleCard from "./components/List/DoubleCard.jsx";
 
 
 const theme = {
@@ -50,12 +50,25 @@ const StyledApp = styled.div`
 
 function App() {
     const [coordinates, setCoordinates] = useState({})
-    const [bound, setBound] = useState({});
     const [posts, setPosts] = useState([])
     const [selectedPost, setSelectedPost] = useState(undefined)
     const [theList, setTheList] = useState([])
 
     const {isLoggedIn, setIsLoggedIn} = useContext(AuthContext)
+    console.log(theList)
+    const theListCards = useMemo(()=>{
+        return theList.map((listElement, index) =>{
+            if(Array.isArray(listElement)){
+                return <DoubleCard key={nanoid()}
+                                   removeFromTheList={createListRemoveFunction(index)}
+                                   components={listElement}
+                        />
+            }
+            return <ListCard key={nanoid()}
+                             removeFromTheList={createListRemoveFunction(index)}
+                    >{listElement}</ListCard>
+        })
+    }, [theList, isLoggedIn])
 
     // syncing auth state and isLoggedIn with this piece of code is genius
     if (Boolean(auth?.currentUser) !== isLoggedIn) {
@@ -82,7 +95,7 @@ function App() {
         return () => {
             clearTimeout(timeId)
         }
-    }, [bound, coordinates])
+    }, [coordinates])
 
     async function getPosts() {
         try {
@@ -92,14 +105,27 @@ function App() {
                 id: doc.id
             }))
             setPosts(postList)
-            console.log(postList)
         } catch (e) {
             console.error(e)
         }
     }
 
     function createListRemoveFunction(index) {
-        return function removeFromTheList() {
+        return function removeFromTheList(index2) {
+            console.log(index, index2)
+            if(index2 !== undefined){
+                if(theList[index].length === 2){
+                    const indexToKeep = index2 === 0? 1 : 0
+                    console.log(indexToKeep)
+                    setTheList([
+                        ...theList.slice(0, index),
+                        [theList[index][indexToKeep]],
+                        ...theList.slice(index + 1)
+                    ])
+                    return
+                }
+            }
+
             setTheList([
                 ...theList.slice(0, index),
                 ...theList.slice(index + 1)
@@ -107,11 +133,29 @@ function App() {
         }
     }
 
-    function addToTheList(component){
+    function addToTheList(component, isHalfSizeComponent){
+        if(isHalfSizeComponent){
+            for(let i = 0; i < theList.length; i++){
+                console.log(i)
+                const listElement = theList[i]
+                if(Array.isArray(listElement) && listElement.length < 2){
+                    setTheList([
+                        ...theList.slice(0, i),
+                        [...listElement, component],
+                        ...theList.slice(i+1)
+                    ])
+                    return
+                }
+            }
+
+            setTheList([...theList, [component]])
+            return
+        }
+
         setTheList([...theList, component])
     }
 
-    console.log(theList)
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -120,9 +164,8 @@ function App() {
                     <Header additonalChildren={<PostCreateButton onClickInvokedUI={<PostCreator getPosts={getPosts}/>}/>}/>
                     <main>
                         <Map
-                            setCoordinates={setCoordinates}
-                            setBound={setBound}
-                            coordinates={coordinates}
+                            setCenterCoordinate={setCoordinates}
+                            centerCoordinate={coordinates}
                         >
                             {posts.map((post) => {
                                 return <PostPreview post={post}
@@ -134,10 +177,7 @@ function App() {
                         </Map>
 
                         <List>
-                            {theList.map((listElement, index) =>
-                                <ListCard key={nanoid()}
-                                          removeFromTheList={createListRemoveFunction(index)}
-                                >{listElement}</ListCard>)}
+                            {theListCards}
                         </List>
                     </main>
                 </StyledApp>
