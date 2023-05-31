@@ -83,7 +83,6 @@ function UserAuth() {
 
     return (
         <StyledUserAuth className={'UserAuth'}>
-            <button onClick={logout}>Sign out</button>
             {
                  isLoggedIn ?
                     <UserProfilePreview logout={logout}  />
