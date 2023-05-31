@@ -15,6 +15,7 @@ import PostPreview from "./components/Post/PostPreview.jsx";
 import ListCard from "./components/List/ListCard.jsx";
 import {nanoid} from "nanoid";
 import DoubleCard from "./components/List/DoubleCard.jsx";
+import UserAuth from "./components/Auth/UserAuth.jsx";
 
 
 const theme = {
@@ -45,6 +46,33 @@ const StyledApp = styled.div`
       height: 100%;
       position: absolute;
     }
+  }
+
+  .authContainer{
+    height: 100%;
+    width: fit-content;
+    background-color: ${({theme}) => theme.colors.deepGreenBlue};
+    border-radius: 0.6em;
+    margin-left: 5px;
+    
+    .UserAuth{
+      height: 100%;
+      width: fit-content;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  
+  .refreshButton{
+    font-size: 20px;
+    height: 50px;
+    text-align: center;
+    padding: 0.2em 2em;
+    margin-left: 1em;
+    border-radius: 1em;
+    background-color: ${({theme})=> theme.colors.deepGreenBlue2};
+    color: ${({theme})=> theme.colors.lightGreen} ;
   }
 `;
 
@@ -161,7 +189,19 @@ function App() {
         <ThemeProvider theme={theme}>
             <ListContext.Provider value={{addToTheList}}>
                 <StyledApp>
-                    <Header additonalChildren={<PostCreateButton onClickInvokedUI={<PostCreator getPosts={getPosts}/>}/>}/>
+                    <Header>
+                        <div className="authContainer">
+                            <UserAuth />
+                        </div>
+                        {
+                            isLoggedIn ?
+                                <>
+                                    <PostCreateButton onClickInvokedUI={<PostCreator getPosts={getPosts}/>}/>
+                                    <button className={'refreshButton'} onClick={getPosts}>Refresh</button>
+                                </>
+                                :<></>
+                        }
+                    </Header>
                     <main>
                         <Map
                             setCenterCoordinate={setCoordinates}

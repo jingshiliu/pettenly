@@ -1,9 +1,6 @@
 import styled from "styled-components";
 import {AiOutlineSearch} from 'react-icons/ai'
-import UserAuth from "./Auth/UserAuth.jsx";
 import Icon from "./Icon.jsx";
-import PostCreator from "./Post/PostCreator.jsx";
-import PostCreateButton from "./Post/PostCreateButton.jsx";
 import React from "react";
 
 
@@ -15,9 +12,8 @@ const StyledHeader = styled.header`
   height: 50px;
   display: flex;
   
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
-  overflow: visible;
   
   .mainHeaderContainer{
     border-radius: 1em;
@@ -40,21 +36,6 @@ const StyledHeader = styled.header`
     }
   }
   
-  .authContainer{
-    width: 50px;
-    height: 50px;
-    background-color: ${({theme}) => theme.colors.deepGreenBlue};
-    margin-left: 5px;
-    border-radius: 0.6em;
-    
-    
-    .UserAuth{
-      width: inherit;
-      height: inherit;
-      
-    }
-  }
-  
   h4{
     font-weight: normal;
   }
@@ -64,20 +45,12 @@ const StyledHeader = styled.header`
     align-items: center;
   }
   
-  .Autocomplete{
-    display: flex;
-  }
-  
   #searchBar{
     border: none;
     font-size: 14px;
     padding: 4px 6px;
     width: 12vw;
     background-color: transparent;
-  }
-  
-  #searchBar:focus-visible{
-    outline: none;
   }
   
   .search{
@@ -95,11 +68,9 @@ const StyledHeader = styled.header`
     font-size: 20px;
     border-right:1px solid ${({theme}) => theme.colors.blue};
   }
-  
-
 `;
 
-function Header({additonalChildren}) {
+function Header({children}) {
     return (
         <StyledHeader>
             <div className="mainHeaderContainer">
@@ -122,11 +93,7 @@ function Header({additonalChildren}) {
                 </div>
             </div>
 
-            <div className="authContainer">
-                <UserAuth />
-            </div>
-
-            {additonalChildren}
+            {children}
 
         </StyledHeader>
     );
