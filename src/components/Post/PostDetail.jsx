@@ -110,25 +110,6 @@ function PostDetail({post}) {
         loadPetImage()
     }, [])
 
-    post = {
-        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum modi obcaecati rem quidem placeat repudiandae provident molestias vitae repellendus architecto",
-        "petImage": "PostImage/cute-pet-names.pngtjvnkZVacNto6SiunSHaF",
-        "createdAt": {
-            "seconds": 1685331173,
-            "nanoseconds": 917000000
-        },
-        "location": {
-            "latitude": 40.740552,
-            "longitude": -73.808123
-        },
-        "petName": "Abiu",
-        "adoptable": true,
-        "postCreator": "bZhM701orDcqDYGNSa9gtQs4Fjg1",
-        "price": 0,
-        "id": "NFyhThuanXOK6oybluyb"
-    }
-
-
     async function makeAppointment() {
         if(auth?.currentUser?.uid === post.postCreator){
             alert('Cannot make an appointment to yourself')
