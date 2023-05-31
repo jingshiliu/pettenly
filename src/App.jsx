@@ -207,7 +207,6 @@ function App() {
                         >
                             {posts.map((post) => {
                                 return <PostPreview post={post}
-                                                    setDisplayingPost={setSelectedPost}
                                                     lat={post.location.latitude}
                                                     lng={post.location.longitude}
                                                     key={post.id}
