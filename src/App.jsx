@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
+import React, { useContext, useEffect, useMemo, useState} from 'react';
 import styled, {ThemeProvider} from "styled-components";
 import {collection, getDocs} from "firebase/firestore"
 import {auth, db} from "./config/firebase.js";
@@ -78,7 +78,6 @@ const StyledApp = styled.div`
 function App() {
     const [coordinates, setCoordinates] = useState({})
     const [posts, setPosts] = useState([])
-    const [selectedPost, setSelectedPost] = useState(undefined)
     const [theList, setTheList] = useState([])
 
     const {isLoggedIn, setIsLoggedIn} = useContext(AuthContext)
@@ -102,7 +101,6 @@ function App() {
         setIsLoggedIn(Boolean(auth?.currentUser))
     }
 
-
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(({coords: {latitude, longitude}}) => {
             setCoordinates({lat: latitude, lng: longitude})
@@ -110,9 +108,6 @@ function App() {
         getPosts()
     }, [])
 
-    useEffect(() => {
-        setSelectedPost(undefined)
-    }, [isLoggedIn])
 
     useEffect(() => {
         let timeId = setTimeout(() => {
@@ -182,6 +177,10 @@ function App() {
         setTheList([...theList, component])
     }
 
+    function logOutCleanUp(){
+        setTheList([])
+    }
+
 
 
     return (
@@ -190,7 +189,7 @@ function App() {
                 <StyledApp>
                     <Header>
                         <div className="authContainer">
-                            <UserAuth />
+                            <UserAuth logOutCleanUp={logOutCleanUp} />
                         </div>
                         {
                             isLoggedIn ?

@@ -10,10 +10,18 @@ import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPo
 import SignInCard from "./SignInCard.jsx";
 
 const StyledUserAuth = styled.div`
-
+  .logoutButton{
+    background-color: ${({theme})=> theme.colors.deepGreenBlue};
+    color: ${({theme})=> theme.colors.lightGreen} ;
+    height: 50px;
+    padding: 0 1em;
+    margin-left: 10px;
+    border-radius: 1em;
+    font-size: 20px;
+  }
 `
 
-function UserAuth() {
+function UserAuth({logOutCleanUp}) {
     const {isLoggedIn, setIsLoggedIn} = useContext(AuthContext)
     async function logIn(email, password){
         try{
@@ -58,6 +66,7 @@ function UserAuth() {
         try{
             await signOut(auth)
             setIsLoggedIn(false)
+            logOutCleanUp()
         }catch (err){
             console.error(err)
         }
@@ -85,7 +94,10 @@ function UserAuth() {
         <StyledUserAuth className={'UserAuth'}>
             {
                  isLoggedIn ?
-                    <UserProfilePreview logout={logout}  />
+                    <>
+                        <UserProfilePreview logout={logout}  />
+                        <button onClick={logout} className={'logoutButton'}>Logout</button>
+                    </>
                     :
                      <SignIn>
                          <SignInCard logIn={logIn}
