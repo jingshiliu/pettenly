@@ -27,6 +27,7 @@ src/credentials/*.json
 config/
 dist
 .firebase
+credentials
 
 packages/react-devtools-core/dist
 packages/react-devtools-extensions/chrome/build
