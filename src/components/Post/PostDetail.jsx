@@ -1,6 +1,6 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import styled from "styled-components";
-import {addDoc, collection, Timestamp} from "firebase/firestore";
+import {addDoc, collection, doc, getDoc, Timestamp} from "firebase/firestore";
 
 import {auth, db} from "../../config/firebase.js";
 import {getImageFromStorage} from "../../utils/index.js";
@@ -98,10 +98,8 @@ const StyledPostDetail = styled.div`
 `
 
 function PostDetail({post}) {
-    const [appointmentTime, setAppointmentTime] = useState(Date.now())
+    const [appointmentTime, setAppointmentTime] = useState('')
     const [petImage, setPetImage] = useState(null)
-
-    const {adoptable, price, description} = post
 
     useEffect(()=>{
         const loadPetImage = async ()=>{
@@ -115,11 +113,25 @@ function PostDetail({post}) {
             alert('Cannot make an appointment to yourself')
             return
         }
+
+        if(! appointmentTime){
+            alert('Please select a time to make an appointment')
+            return
+        }
+
+        const userDoc = await getDoc(doc(db, 'user', auth?.currentUser?.uid))
+        const userName = userDoc.data().username
+
+
         try{
             await addDoc(collection(db, "appointment"), {
                 from: auth.currentUser.uid,
                 to: post.postCreator,
-                time: Timestamp.fromDate(appointmentTime)
+                time: Timestamp.fromDate(new Date(appointmentTime)),
+                name: userName,
+                petName: post.petName,
+                status: 'pending',
+                message: ''
             })
             alert("Appointment Made")
         }catch (e){
@@ -152,7 +164,7 @@ function PostDetail({post}) {
                     />
                 </label>
 
-                <button onClick={makeAppointment}>Make a appointment</button>
+                <button onClick={makeAppointment}>Make an appointment</button>
             </div>
         </StyledPostDetail>
     );
