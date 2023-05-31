@@ -31,21 +31,13 @@ const StyledPostCreateButton = styled.div`
 `
 
 function PostCreateButton({onClickInvokedUI}) {
-    const {isLoggedIn} = useContext(AuthContext)
     const {addToTheList} = useContext(ListContext)
     return (
         <StyledPostCreateButton>
-            {
-                isLoggedIn && (
-                    <>
-                        <button className={'postCreateButton'} onClick={() => addToTheList(onClickInvokedUI)}>
-                            <BsPlusLg />
-                            <span>Create Post</span>
-                        </button>
-                    </>
-                )
-            }
-
+            <button className={'postCreateButton'} onClick={() => addToTheList(onClickInvokedUI)}>
+                <BsPlusLg />
+                <span>Create Post</span>
+            </button>
         </StyledPostCreateButton>
     );
 }
