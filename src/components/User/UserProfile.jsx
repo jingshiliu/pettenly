@@ -266,7 +266,7 @@ const StyledUserProfile = styled.div`
 
 `
 
-function UserProfile() {
+function UserProfile({updateProfilePreviewPhoto}) {
     const [user, setUser] = useState({})
     const [posts, setPosts] = useState([])
     const [appointments, setAppointments] = useState([])
@@ -287,6 +287,7 @@ function UserProfile() {
             const userDoc = await getDoc(doc(db, 'user', auth?.currentUser?.uid))
             const userData = userDoc.data()
             const profilePhotoUrl = await getImageFromStorage(userData.image)
+            updateProfilePreviewPhoto(profilePhotoUrl)
             setUser({
                 ...userData,
                 image: profilePhotoUrl
@@ -342,10 +343,6 @@ function UserProfile() {
     }
 
     async function uploadProfilePhoto(image){
-        // uploadPhoto
-        // upload user doc
-        // refresh
-        console.log("image")
         try {
             const path = await uploadFile(image, 'profile')
             await updateDoc(doc(db, 'user', auth?.currentUser?.uid),{
