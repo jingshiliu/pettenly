@@ -80,6 +80,23 @@ const StyledPostCreator = styled.div`
       filter: none;
     }
   }
+
+  .isNotSelected{
+    img{
+      filter: brightness(60%);
+    }
+
+    span{
+      visibility: visible;
+      filter: none;
+    }
+  }
+  
+  .isNotSelected:hover{
+    img{
+      filter: brightness(70%);
+    }
+  }
   
   .petNameInputContainer{
     font-size: 20px;
@@ -151,6 +168,7 @@ function PostCreator({getPosts}) {
     const [lat, setLat] = useState(0)
     const [description, setDescription] = useState('')
     const [isCreated, setIsCreated] = useState(false)
+    const [hasPhotoSelected, setHasPhotoSelected] = useState(false)
     const {isLoggedIn} = useContext(AuthContext)
 
     useEffect(()=>{
@@ -178,6 +196,7 @@ function PostCreator({getPosts}) {
         const reader = new FileReader()
 
         reader.addEventListener('load', loadEvent =>{
+            setHasPhotoSelected(true)
             setPetImageUrl(loadEvent.target.result)
         })
 
@@ -211,7 +230,7 @@ function PostCreator({getPosts}) {
 
     return (
         <StyledPostCreator>
-            <div className="fileInputContainer">
+            <div className={`fileInputContainer ${hasPhotoSelected ? '' : 'isNotSelected'}`}>
                 <img src={petImageUrl} alt=""/>
                 <input type="file"
                        onChange={handlePetImageChange}
