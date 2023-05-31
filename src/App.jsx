@@ -51,8 +51,6 @@ const StyledApp = styled.div`
   .authContainer{
     height: 100%;
     width: fit-content;
-    background-color: ${({theme}) => theme.colors.deepGreenBlue};
-    border-radius: 0.6em;
     margin-left: 5px;
     
     .UserAuth{
@@ -61,6 +59,7 @@ const StyledApp = styled.div`
       display: flex;
       justify-content: center;
       align-items: center;
+      
     }
   }
   
