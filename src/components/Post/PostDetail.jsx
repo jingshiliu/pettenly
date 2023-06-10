@@ -155,17 +155,25 @@ function PostDetail({post}) {
                 </label>
             </div>
 
-            <div className="appointmentContainer">
-                <label>
-                    Time:
-                    <input type="datetime-local"
-                           value={appointmentTime}
-                           onChange={e => setAppointmentTime(e.target.value)}
-                    />
-                </label>
+            {
+                auth?.currentUser?.uid === post.postCreator
+                    ?
+                    <>
+                    </>
+                    :
+                    (<div className="appointmentContainer">
+                        <label>
+                            Time:
+                            <input type="datetime-local"
+                                   value={appointmentTime}
+                                   onChange={e => setAppointmentTime(e.target.value)}
+                            />
+                        </label>
 
-                <button onClick={makeAppointment}>Make an appointment</button>
-            </div>
+                        <button onClick={makeAppointment}>Make an appointment</button>
+                    </div>)
+            }
+
         </StyledPostDetail>
     );
 }
