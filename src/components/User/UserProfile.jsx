@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import styled from "styled-components";
 import PostPreview from "../Post/PostPreview.jsx";
 import {nanoid} from "nanoid";
@@ -6,6 +6,8 @@ import {FiCheck} from 'react-icons/fi'
 import {doc, getDoc, query, where, orderBy, collection, getDocs, updateDoc} from "firebase/firestore";
 import {db, auth} from "../../config/firebase.js";
 import {getImageFromStorage, uploadFile} from "../../utils/index.js";
+import {ListContext} from "../../context/ListContext.js";
+import PostListAllCard from "../Post/PostListAllCard.jsx";
 
 const StyledAppointmentUI = styled.div`
   width: 100%;
@@ -289,6 +291,8 @@ function UserProfile({updateProfilePreviewPhoto}) {
     const [posts, setPosts] = useState([])
     const [appointments, setAppointments] = useState([])
 
+    const {addToTheList} = useContext(ListContext)
+
     useEffect(()=>{
         loadData()
     }, [])
@@ -395,7 +399,7 @@ function UserProfile({updateProfilePreviewPhoto}) {
             <div className="row second-row">
                 <div className={'postTitleContainer'}>
                     <h3>Posts</h3>
-                    <button>See All</button>
+                    <button onClick={() => addToTheList(<PostListAllCard />)}>See All</button>
                 </div>
                 <hr/>
                 <div className="postListContainer">
