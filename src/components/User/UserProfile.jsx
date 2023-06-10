@@ -213,6 +213,24 @@ const StyledUserProfile = styled.div`
       border-top: 1px solid ${({theme}) => theme.colors.lightGreen};
     }
     
+    .postTitleContainer{
+      display: flex;
+      justify-content: space-between;
+      
+      button{
+        color: ${({theme}) => theme.colors.lightGreen};
+        background-color: #fff4;
+        padding: 0 1em;
+        border-radius: 0.4em;
+        position: relative;
+        bottom: 0.1em;
+        
+        :hover{
+          background-color: #fff6;
+        }
+      }
+    }
+    
     .postListContainer{
       overflow: scroll;
       padding-top: 10px;
@@ -375,7 +393,10 @@ function UserProfile({updateProfilePreviewPhoto}) {
             </div>
 
             <div className="row second-row">
-                <h3>Posts</h3>
+                <div className={'postTitleContainer'}>
+                    <h3>Posts</h3>
+                    <button>See All</button>
+                </div>
                 <hr/>
                 <div className="postListContainer">
                     <div className="postsContainer">
