@@ -420,7 +420,7 @@ function UserProfile({updateProfilePreviewPhoto}) {
                 <hr/>
                 <div className="appointmentsContainer">
                     {
-                        appointments ?
+                        appointments.length > 0 ?
                             appointments.map(appointment =>
                                 <>
                                     <AppointmentUI key={nanoid()} appointment={appointment} />
