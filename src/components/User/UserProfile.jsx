@@ -3,9 +3,9 @@ import styled from "styled-components";
 import PostPreview from "../Post/PostPreview.jsx";
 import {nanoid} from "nanoid";
 import {FiCheck} from 'react-icons/fi'
-import {doc, getDoc, updateDoc} from "firebase/firestore";
+import {doc, updateDoc} from "firebase/firestore";
 import {db, auth} from "../../config/firebase.js";
-import {getAppointments, getImageFromStorage, getPosts, uploadFile} from "../../utils/index.js";
+import {getAppointments, getPosts, getUser, uploadFile} from "../../utils/index.js";
 import {ListContext} from "../../context/ListContext.js";
 import PostListAllCard from "../Post/PostListAllCard.jsx";
 
@@ -299,6 +299,12 @@ function UserProfile({updateProfilePreviewPhoto}) {
 
     function loadData(){
         getUser()
+            .then(user =>{
+                setUser(user)
+                updateProfilePreviewPhoto(user.image)
+            })
+            .catch(err => console.error(err))
+
         getPosts()
             .then(postsData => setPosts(postsData))
             .catch(err => console.error(err))
@@ -308,20 +314,6 @@ function UserProfile({updateProfilePreviewPhoto}) {
             .catch(err => console.error(err))
     }
 
-    async function getUser(){
-        try{
-            const userDoc = await getDoc(doc(db, 'user', auth?.currentUser?.uid))
-            const userData = userDoc.data()
-            const profilePhotoUrl = await getImageFromStorage(userData.image)
-            updateProfilePreviewPhoto(profilePhotoUrl)
-            setUser({
-                ...userData,
-                image: profilePhotoUrl
-            })
-        }catch (e){
-            console.error(e)
-        }
-    }
 
     async function uploadProfilePhoto(image){
         try {
@@ -358,7 +350,15 @@ function UserProfile({updateProfilePreviewPhoto}) {
             <div className="row second-row">
                 <div className={'postTitleContainer'}>
                     <h3>Posts</h3>
-                    <button onClick={() => addToTheList(<PostListAllCard />)}>See All</button>
+                    <button
+                        onClick={() => addToTheList(<PostListAllCard
+                                                        postList={posts}
+                                                        userData={user}
+                                                    />)
+                        }
+                    >
+                        See All
+                    </button>
                 </div>
                 <hr/>
                 <div className="postListContainer">
