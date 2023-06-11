@@ -35,6 +35,7 @@ const StyledApp = styled.div`
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  color: ${({theme})=> theme.colors.lightGreen} ;
 
   main {
     position: relative;
