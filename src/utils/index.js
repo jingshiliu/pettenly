@@ -1,7 +1,7 @@
 import {nanoid} from "nanoid";
 import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
 import {auth, db, storage} from "../config/firebase.js";
-import {collection, getDocs, orderBy, query, where} from "firebase/firestore";
+import {collection, doc, getDoc, getDocs, orderBy, query, where} from "firebase/firestore";
 
 export function fireStorageFilePostfix(){
     return nanoid()
@@ -78,6 +78,21 @@ export async function getPosts(){
         }
 
         return postsData
+    }catch (e){
+        console.error(e)
+    }
+}
+
+export async function getUser(){
+    try{
+        const userDoc = await getDoc(doc(db, 'user', auth?.currentUser?.uid))
+        const userData = userDoc.data()
+        const profilePhotoUrl = await getImageFromStorage(userData.image)
+
+        return {
+            ...userData,
+            image: profilePhotoUrl
+        }
     }catch (e){
         console.error(e)
     }
