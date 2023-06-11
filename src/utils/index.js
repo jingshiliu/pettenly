@@ -1,6 +1,7 @@
 import {nanoid} from "nanoid";
 import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
-import {storage} from "../config/firebase.js";
+import {auth, db, storage} from "../config/firebase.js";
+import {collection, getDocs, orderBy, query, where} from "firebase/firestore";
 
 export function fireStorageFilePostfix(){
     return nanoid()
@@ -35,6 +36,49 @@ export async function uploadFile(file, type='post'){
 
         return path
     }catch (e) {
+        console.error(e)
+    }
+}
+
+export async function getAppointments(){
+    try {
+        const appts = await getDocs(query(
+            collection(db, 'appointment'),
+            where('to', '==', auth?.currentUser?.uid),
+            orderBy('time', 'desc')
+        ))
+
+        const apptsData = []
+        for(let appt of appts.docs)
+            apptsData.push({
+                ...appt.data(),
+                id: appt.id,
+                time: appt.data().time.toDate()
+            })
+        return apptsData
+    }catch (e) {
+        console.error(e)
+    }
+}
+
+export async function getPosts(){
+    try{
+        const postsSnapshot = await getDocs(query(
+            collection(db, 'post'),
+            where('postCreator', '==', auth?.currentUser?.uid),
+            orderBy('createdAt', 'desc')
+        ))
+
+        const postsData = []
+        for(let post of postsSnapshot.docs){
+            postsData.push({
+                ...post.data(),
+                id: post.id
+            })
+        }
+
+        return postsData
+    }catch (e){
         console.error(e)
     }
 }

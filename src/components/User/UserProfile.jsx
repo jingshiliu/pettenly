@@ -5,7 +5,7 @@ import {nanoid} from "nanoid";
 import {FiCheck} from 'react-icons/fi'
 import {doc, getDoc, query, where, orderBy, collection, getDocs, updateDoc} from "firebase/firestore";
 import {db, auth} from "../../config/firebase.js";
-import {getImageFromStorage, uploadFile} from "../../utils/index.js";
+import {getAppointments, getImageFromStorage, getPosts, uploadFile} from "../../utils/index.js";
 import {ListContext} from "../../context/ListContext.js";
 import PostListAllCard from "../Post/PostListAllCard.jsx";
 
@@ -299,12 +299,11 @@ function UserProfile({updateProfilePreviewPhoto}) {
 
     function loadData(){
         getUser()
-        getPosts()
-        getAppointments()
+        loadPosts()
+        loadAppointments()
     }
 
     async function getUser(){
-
         try{
             const userDoc = await getDoc(doc(db, 'user', auth?.currentUser?.uid))
             const userData = userDoc.data()
@@ -319,49 +318,12 @@ function UserProfile({updateProfilePreviewPhoto}) {
         }
     }
 
-    async function getPosts(){
-        try{
-            const postsSnapshot = await getDocs(query(
-                collection(db, 'post'),
-                where('postCreator', '==', auth?.currentUser?.uid),
-                orderBy('createdAt', 'desc')
-            ))
-
-            const postsData = []
-            for(let post of postsSnapshot.docs){
-                postsData.push({
-                    ...post.data(),
-                    id: post.id
-                })
-            }
-            console.log(postsData)
-
-            setPosts(postsData)
-        }catch (e){
-            console.error(e)
-        }
-
+    async function loadPosts(){
+        setPosts(await getPosts())
     }
 
-    async function getAppointments(){
-        try {
-            const appts = await getDocs(query(
-                collection(db, 'appointment'),
-                where('to', '==', auth?.currentUser?.uid),
-                orderBy('time', 'desc')
-            ))
-
-            const apptsData = []
-            for(let appt of appts.docs)
-                apptsData.push({
-                    ...appt.data(),
-                    id: appt.id,
-                    time: appt.data().time.toDate()
-                })
-            setAppointments(apptsData)
-        }catch (e) {
-            console.error(e)
-        }
+    async function loadAppointments(){
+        setAppointments(await getAppointments())
     }
 
     async function uploadProfilePhoto(image){
