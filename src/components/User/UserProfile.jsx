@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PostPreview from "../Post/PostPreview.jsx";
 import {nanoid} from "nanoid";
 import {FiCheck} from 'react-icons/fi'
-import {doc, getDoc, query, where, orderBy, collection, getDocs, updateDoc} from "firebase/firestore";
+import {doc, getDoc, updateDoc} from "firebase/firestore";
 import {db, auth} from "../../config/firebase.js";
 import {getAppointments, getImageFromStorage, getPosts, uploadFile} from "../../utils/index.js";
 import {ListContext} from "../../context/ListContext.js";
