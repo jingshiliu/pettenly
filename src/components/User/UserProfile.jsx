@@ -299,8 +299,13 @@ function UserProfile({updateProfilePreviewPhoto}) {
 
     function loadData(){
         getUser()
-        loadPosts()
-        loadAppointments()
+        getPosts()
+            .then(postsData => setPosts(postsData))
+            .catch(err => console.error(err))
+
+        getAppointments()
+            .then(appts => setAppointments(appts))
+            .catch(err => console.error(err))
     }
 
     async function getUser(){
@@ -316,14 +321,6 @@ function UserProfile({updateProfilePreviewPhoto}) {
         }catch (e){
             console.error(e)
         }
-    }
-
-    async function loadPosts(){
-        setPosts(await getPosts())
-    }
-
-    async function loadAppointments(){
-        setAppointments(await getAppointments())
     }
 
     async function uploadProfilePhoto(image){
