@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React, {useContext, useEffect, useState} from "react";
 import {getImageFromStorage} from "../../../utils/index.js";
 import {ListContext} from "../../../context/ListContext.js";
+import PostDetail from "../PostDetail.jsx";
 
 const StyledPostSingleCard = styled.div`
   margin: 1em 0;
