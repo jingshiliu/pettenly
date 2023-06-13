@@ -40,11 +40,13 @@ export async function uploadFile(file, type='post'){
     }
 }
 
-export async function getAppointments(){
+export async function getAppointments(userId){
+    if(userId === undefined)
+        userId = auth?.currentUser?.uid
     try {
         const appts = await getDocs(query(
             collection(db, 'appointment'),
-            where('to', '==', auth?.currentUser?.uid),
+            where('to', '==', userId),
             orderBy('time', 'desc')
         ))
 
@@ -61,11 +63,13 @@ export async function getAppointments(){
     }
 }
 
-export async function getPosts(){
+export async function getPosts(userId){
+    if(userId === undefined)
+        userId = auth?.currentUser?.uid
     try{
         const postsSnapshot = await getDocs(query(
             collection(db, 'post'),
-            where('postCreator', '==', auth?.currentUser?.uid),
+            where('postCreator', '==', userId),
             orderBy('createdAt', 'desc')
         ))
 
@@ -83,9 +87,11 @@ export async function getPosts(){
     }
 }
 
-export async function getUser(){
+export async function getUser(userId){
+    if(userId === undefined)
+        userId = auth?.currentUser?.uid
     try{
-        const userDoc = await getDoc(doc(db, 'user', auth?.currentUser?.uid))
+        const userDoc = await getDoc(doc(db, 'user', userId))
         const userData = userDoc.data()
         const profilePhotoUrl = await getImageFromStorage(userData.image)
 
