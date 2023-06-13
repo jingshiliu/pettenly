@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import {addDoc, collection, doc, getDoc, Timestamp} from "firebase/firestore";
 
@@ -17,45 +17,70 @@ const StyledPostDetail = styled.div`
   display: flex;
   overflow: hidden;
   flex-direction: column;
-  
-  .petImageContainer{
+
+  button {
+    border-radius: 0.6em;
+    padding: 0.5em 1em;
+    background-color: ${({theme}) => theme.colors.lightGreen2};
+    color: ${({theme}) => theme.colors.deepGreenBlue2};
+  }
+
+  button:hover {
+    filter: brightness(0.94);
+  }
+
+  .petImageContainer {
     width: 100%;
     height: 70%;
     border-radius: 0.6em;
     overflow: hidden;
-    
-    img{
+
+    img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
   }
-  
-  .postDescriptionContainer{
+
+  .postDescriptionContainer {
     margin-top: 0.5em;
     
-    hr{
+    .title{
+      display: flex;
+      justify-content: space-between;
+      
+      div{
+        button{
+          font-size: 10px;
+          margin-left: 1em;
+          margin-bottom: 0.2em;
+        }
+      }
+    }
+
+    hr {
       border: none;
       border-bottom: 1px solid ${({theme}) => theme.colors.lightGreen2};
     }
-    p{
+
+    p {
       font-size: 15px;
       font-weight: 200;
       padding: 0.2em 0.4em;
 
-      @media (max-width: 1200px){
+      @media (max-width: 1200px) {
         font-size: 12px;
       }
-      @media (max-width: 1000px){
+      @media (max-width: 1000px) {
         font-size: 10px;
       }
-      @media (max-width: 700px){
+      @media (max-width: 700px) {
         font-size: 7px;
       }
     }
   }
-  
-  .appointmentContainer{
+
+  .appointmentContainer {
     margin-top: 0.6em;
     display: flex;
     justify-content: space-between;
@@ -64,57 +89,48 @@ const StyledPostDetail = styled.div`
     @media (max-width: 1700px) {
       flex-direction: column;
 
-      button{
+      button {
         margin-top: 5px;
         width: 100%;
       }
 
-      label{
+      label {
         width: 100%;
         display: flex;
         justify-content: space-between;
       }
     }
-    
-    button{
-      border-radius: 0.6em;
-      padding: 0.5em 1em;
-      background-color: ${({theme}) => theme.colors.lightGreen2};
-      color: ${({theme}) => theme.colors.deepGreenBlue2};
-    }
-    
-    button:hover{
-      filter: brightness(0.94);
-    }
-    
-    input[type="datetime-local"]{
+
+
+
+    input[type="datetime-local"] {
       border: none;
       border-radius: 0.4em;
       background-color: ${({theme}) => theme.colors.lightGreen};
       padding: 0.2em 0.5em;
     }
   }
-  
+
 `
 
 function PostDetail({post}) {
     const [appointmentTime, setAppointmentTime] = useState('')
     const [petImage, setPetImage] = useState(null)
 
-    useEffect(()=>{
-        const loadPetImage = async ()=>{
+    useEffect(() => {
+        const loadPetImage = async () => {
             setPetImage(await getImageFromStorage(post.petImage))
         }
         loadPetImage()
     }, [])
 
     async function makeAppointment() {
-        if(auth?.currentUser?.uid === post.postCreator){
+        if (auth?.currentUser?.uid === post.postCreator) {
             alert('Cannot make an appointment to yourself')
             return
         }
 
-        if(! appointmentTime){
+        if (!appointmentTime) {
             alert('Please select a time to make an appointment')
             return
         }
@@ -123,7 +139,7 @@ function PostDetail({post}) {
         const userName = userDoc.data().username
 
 
-        try{
+        try {
             await addDoc(collection(db, "appointment"), {
                 from: auth.currentUser.uid,
                 to: post.postCreator,
@@ -134,7 +150,7 @@ function PostDetail({post}) {
                 message: ''
             })
             alert("Appointment Made")
-        }catch (e){
+        } catch (e) {
             console.error(e)
         }
     }
@@ -146,22 +162,21 @@ function PostDetail({post}) {
             </div>
 
             <div className={'postDescriptionContainer'}>
-                <label htmlFor="">
-                    {post.petName}'s intro
-                    <hr/>
-                    <p>
-                        {post.description}
-                    </p>
-                </label>
+                <div className={'title'}>
+                    <span>{post.petName}'s intro</span>
+                    <div className={'buttons'}>
+                        <button>See Post Creator</button>
+                        <button>Chat</button>
+                    </div>
+                </div>
+                <hr/>
+                <p>
+                    {post.description}
+                </p>
             </div>
 
-            {
-                auth?.currentUser?.uid === post.postCreator
-                    ?
-                    <>
-                    </>
-                    :
-                    (<div className="appointmentContainer">
+            {auth?.currentUser?.uid !== post.postCreator
+                ?   <div className="appointmentContainer">
                         <label>
                             Time:
                             <input type="datetime-local"
@@ -171,8 +186,8 @@ function PostDetail({post}) {
                         </label>
 
                         <button onClick={makeAppointment}>Make an appointment</button>
-                    </div>)
-            }
+                    </div>
+                : null}
 
         </StyledPostDetail>
     );
