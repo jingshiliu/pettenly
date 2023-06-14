@@ -10,18 +10,16 @@ const StyledDoubleCard = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  
-  .ListCard{
+
+  .ListCard {
     margin-bottom: 1vh;
   }
 `
 
 function DoubleCard({removeFromTheList, components}) {
-    const componentList = useMemo(()=>{
-        return components.map((component, index) => <ListCard key={nanoid()}
-                                                              removeFromTheList={()=> removeFromTheList(index)}
-                                                    >{component}</ListCard>)
-    }, [components])
+    const componentList = components.map((component, index) => <ListCard key={component.id}
+                                                                         removeFromTheList={() => removeFromTheList(index)}
+                                                                >{component.component}</ListCard>)
     return (
         <StyledDoubleCard>
             {componentList}

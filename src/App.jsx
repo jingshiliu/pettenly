@@ -82,20 +82,6 @@ function App() {
     const [theList, setTheList] = useState([])
 
     const {isLoggedIn, setIsLoggedIn} = useContext(AuthContext)
-    console.log(theList)
-    const theListCards = useMemo(()=>{
-        return theList.map((listElement, index) =>{
-            if(Array.isArray(listElement)){
-                return <DoubleCard key={nanoid()}
-                                   removeFromTheList={createListRemoveFunction(index)}
-                                   components={listElement}
-                        />
-            }
-            return <ListCard key={nanoid()}
-                             removeFromTheList={createListRemoveFunction(index)}
-                    >{listElement}</ListCard>
-        })
-    }, [theList, isLoggedIn])
 
     // syncing auth state and isLoggedIn with this piece of code is genius
     if (Boolean(auth?.currentUser) !== isLoggedIn) {
@@ -157,6 +143,10 @@ function App() {
     }
 
     function addToTheList(component, isHalfSizeComponent){
+        const newListElement = {
+            component,
+            id: nanoid()
+        }
         if(isHalfSizeComponent){
             for(let i = 0; i < theList.length; i++){
                 console.log(i)
@@ -164,18 +154,18 @@ function App() {
                 if(Array.isArray(listElement) && listElement.length < 2){
                     setTheList([
                         ...theList.slice(0, i),
-                        [...listElement, component],
+                        [...listElement, newListElement],
                         ...theList.slice(i+1)
                     ])
                     return
                 }
             }
 
-            setTheList([...theList, [component]])
+            setTheList([...theList, [newListElement]])
             return
         }
 
-        setTheList([...theList, component])
+        setTheList([...theList, newListElement])
     }
 
     function logOutCleanUp(){
@@ -215,7 +205,16 @@ function App() {
                         </Map>
 
                         <List>
-                            {theListCards}
+                            {theList.map((listElement, index) =>{
+                                if(Array.isArray(listElement)){
+                                    return <DoubleCard key={listElement[0].id}
+                                                       removeFromTheList={createListRemoveFunction(index)}
+                                                       components={listElement}
+                                    />
+                                }
+                                return <ListCard key={listElement.id}
+                                                 removeFromTheList={createListRemoveFunction(index)}
+                                >{listElement.component}</ListCard>})}
                         </List>
                     </main>
                 </StyledApp>
