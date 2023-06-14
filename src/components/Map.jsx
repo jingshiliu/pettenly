@@ -21,10 +21,11 @@ function Map({centerCoordinate, setCenterCoordinate, children}) {
                 margin={[50, 50, 50, 50]}
                 options={mapStyle}
                 onChange={(e) => {
-                    setCenterCoordinate({
-                        lat: e.center.lat,
-                        lng: e.center.lng
-                    })
+                    if(setCenterCoordinate)
+                        setCenterCoordinate({
+                            lat: e.center.lat,
+                            lng: e.center.lng
+                        })
                 }}
                 onChildClick={() => {
                     console.log('Map on Child Click')

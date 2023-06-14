@@ -193,7 +193,6 @@ function App() {
                     </Header>
                     <main>
                         <Map
-                            setCenterCoordinate={setCoordinates}
                             centerCoordinate={coordinates}
                         >
                             {posts.map((post) => {
