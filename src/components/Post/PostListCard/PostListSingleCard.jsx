@@ -97,7 +97,10 @@ function PostListSingleCard({post}) {
             .catch(err => console.error(err))
     }, [])
     return (
-        <StyledPostSingleCard onClick={() => addToTheList(<PostDetail post={post} />, true)}>
+        <StyledPostSingleCard
+            className={'PostListSingleCard'}
+            onClick={() => addToTheList(<PostDetail post={post} />, true)}
+        >
             <div className="hoverEffect"></div>
             <div className="petImageContainer">
                 <img src={imageUrl} alt=""/>
