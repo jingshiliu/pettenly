@@ -7,7 +7,8 @@ import {doc, updateDoc} from "firebase/firestore";
 import {db, auth} from "../../config/firebase.js";
 import {getAppointments, getPosts, getUser, uploadFile} from "../../utils/index.js";
 import {ListContext} from "../../context/ListContext.js";
-import PostListAllCard from "../Post/PostListAllCard.jsx";
+import PostListAllCard from "../Post/PostListCard/PostListAllCard.jsx";
+import PostListSingleCard from "../Post/PostListCard/PostListSingleCard.jsx";
 
 const StyledAppointmentUI = styled.div`
   width: 100%;
@@ -135,6 +136,9 @@ const StyledUserProfile = styled.div`
   color: ${({theme}) => theme.colors.lightGreen};
   overflow: hidden;
   opacity: 0.94;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
   
   .row{
     width: 100%;
@@ -205,7 +209,16 @@ const StyledUserProfile = styled.div`
     }
   }
   
+  .no-hover:hover{
+    cursor: auto;
+    img{
+      filter: brightness(1);
+    }
+  }
+  
   .second-row{
+    min-height: 21%;
+    
     h3{
       font-weight: 400;
     }
@@ -234,13 +247,15 @@ const StyledUserProfile = styled.div`
     }
     
     .postListContainer{
-      overflow: scroll;
       padding-top: 10px;
       width: 100%;
+      height: 100%;
+      overflow-y: scroll;
       
       .postsContainer{
         display: flex;
-        width: fit-content;
+        width: 100%;
+        overflow: scroll;
 
         .PostPreview{
           width: 120px;
@@ -253,13 +268,27 @@ const StyledUserProfile = styled.div`
           align-items: center;
           margin-right: 10px;
         }
+        
+        .PostListSingleCard{
+          margin: 0;
+          margin-bottom: 0.5em;
+          width: 100%;
+          
+        }
+      }
+      
+      .flex-col{
+        flex-direction: column;
       }
     }
   }
-
   
   
   .third-row{
+    height: 100%;
+    position: relative;
+
+    
     h3{
       font-weight: 400;
     }
@@ -274,6 +303,8 @@ const StyledUserProfile = styled.div`
       display: flex;
       flex-direction: column;
       align-items: center;
+      height: 100%;
+      overflow: scroll;
       
       hr{
         position: relative;
@@ -286,32 +317,35 @@ const StyledUserProfile = styled.div`
 
 `
 
-function UserProfile({updateProfilePreviewPhoto}) {
+function UserProfile({updateProfilePreviewPhoto, userId}) {
     const [user, setUser] = useState({})
     const [posts, setPosts] = useState([])
     const [appointments, setAppointments] = useState([])
-
     const {addToTheList} = useContext(ListContext)
+
+    if (! userId) userId = auth?.currentUser?.uid
+    const isOwnProfile = userId === auth?.currentUser?.uid
 
     useEffect(()=>{
         loadData()
     }, [])
 
     function loadData(){
-        getUser()
+        getUser(userId)
             .then(user =>{
                 setUser(user)
-                updateProfilePreviewPhoto(user.image)
+                if(updateProfilePreviewPhoto)
+                    updateProfilePreviewPhoto(user.image)
             })
             .catch(err => console.error(err))
 
-        getPosts()
+        getPosts(userId)
             .then(postsData => setPosts(postsData))
             .catch(err => console.error(err))
 
-        getAppointments()
-            .then(appts => setAppointments(appts))
-            .catch(err => console.error(err))
+        isOwnProfile && getAppointments()
+                        .then(appts => setAppointments(appts))
+                        .catch(err => console.error(err))
     }
 
 
@@ -331,13 +365,20 @@ function UserProfile({updateProfilePreviewPhoto}) {
     return (
         <StyledUserProfile>
             <div className="row first-row">
-                <div className={'profilePhotoContainer'}>
+                <div className={`profilePhotoContainer ${isOwnProfile ? '': 'no-hover'}`}>
                     <img src={user.image} alt=""/>
-                    <input type="file"
-                           onChange={e => uploadProfilePhoto(e.target.files[0])}
-                    />
 
-                    <span>Upload</span>
+                    {
+                        isOwnProfile
+                        ?
+                            <>
+                                <input type="file"
+                                       onChange={e => uploadProfilePhoto(e.target.files[0])}
+                                />
+
+                                <span>Upload</span>
+                            </>
+                            : null}
                 </div>
 
                 <div>
@@ -362,41 +403,46 @@ function UserProfile({updateProfilePreviewPhoto}) {
                 </div>
                 <hr/>
                 <div className="postListContainer">
-                    <div className="postsContainer">
-                        {posts.map(post =>
-                            <div className={'postCard'}>
-                                <PostPreview key={nanoid()}
-                                             post={post}
-                                />
-                                <span>
-                                {post.petName ? post.petName : "Doudou"}
-                                </span>
-                            </div>
-                        )
+                    <div className={`postsContainer ${isOwnProfile? '': 'flex-col'}`}>
+                        {
+                            isOwnProfile
+                            ? posts.map(post =>
+                                        <div className={'postCard'}>
+                                            <PostPreview key={nanoid()}
+                                                         post={post}
+                                            />
+                                            <span>
+                                                {post.petName ? post.petName : "Doudou"}
+                                            </span>
+                                        </div>)
+                                :
+                                posts.map(post => <PostListSingleCard post={post}/>)
                         }
                     </div>
                 </div>
             </div>
 
-            <div className="row third-row">
-                <h3>Appointments</h3>
-                <hr/>
-                <div className="appointmentsContainer">
-                    {
-                        appointments.length > 0 ?
-                            appointments.map(appointment =>
-                                <>
-                                    <AppointmentUI key={nanoid()} appointment={appointment} />
-                                    <hr/>
-                                </>
-                            )
-                            :
-                            <div>
-                                No Appointment Found
-                            </div>
-                    }
-                </div>
-            </div>
+            {isOwnProfile
+                ?
+                <div className="row third-row">
+                        <h3>Appointments</h3>
+                        <hr/>
+                        <div className="appointmentsContainer">
+                            {
+                                appointments.length > 0 ?
+                                    appointments.map(appointment =>
+                                        <>
+                                            <AppointmentUI key={nanoid()} appointment={appointment} />
+                                            <hr/>
+                                        </>
+                                    )
+                                    :
+                                    <div>
+                                        No Appointment Found
+                                    </div>
+                            }
+                        </div>
+                </div> : null}
         </StyledUserProfile>
     );
 }
