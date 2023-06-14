@@ -1,7 +1,7 @@
 import {nanoid} from "nanoid";
 import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
 import {auth, db, storage} from "../config/firebase.js";
-import {collection, doc, getDoc, getDocs, orderBy, query, where} from "firebase/firestore";
+import {collection, doc, getDoc, getDocs, orderBy, query, where, deleteDoc} from "firebase/firestore";
 
 export function fireStorageFilePostfix(){
     return nanoid()
@@ -84,6 +84,16 @@ export async function getPosts(userId){
         return postsData
     }catch (e){
         console.error(e)
+    }
+}
+
+export async function deletePost(postId){
+    if(postId === undefined) return
+
+    try{
+        await deleteDoc(doc(db, 'post', postId))
+    }catch (err){
+        console.error(err)
     }
 }
 
