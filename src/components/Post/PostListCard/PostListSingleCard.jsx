@@ -26,6 +26,7 @@ const StyledPostSingleCard = styled.div`
     left: -40%;
     top: -5%;
     opacity: 0.4;
+    z-index: 1;
   }
 
   .petImageContainer{
@@ -43,6 +44,7 @@ const StyledPostSingleCard = styled.div`
   .postDetail{
     margin-left: 1em;
     width: 65%;
+    position: relative;
     
     h4{
       font-weight: 400;
@@ -66,6 +68,8 @@ const StyledPostSingleCard = styled.div`
     p{
       font-size: smaller;
     }
+    
+
   }
 `
 
@@ -99,9 +103,10 @@ function PostListSingleCard({post}) {
     return (
         <StyledPostSingleCard
             className={'PostListSingleCard'}
-            onClick={() => addToTheList(<PostDetail post={post} />, true)}
         >
-            <div className="hoverEffect"></div>
+            <div className="hoverEffect"
+                 onClick={() => addToTheList(<PostDetail post={post} />, true)}
+            />
             <div className="petImageContainer">
                 <img src={imageUrl} alt=""/>
             </div>
@@ -114,6 +119,7 @@ function PostListSingleCard({post}) {
                 <p>
                     {post.description}
                 </p>
+
             </div>
         </StyledPostSingleCard>
     );
