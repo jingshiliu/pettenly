@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import React, {useContext, useEffect, useState} from "react";
-import {getImageFromStorage} from "../../../utils/index.js";
-import {ListContext} from "../../../context/ListContext.js";
+import {deletePost, getImageFromStorage} from "../../../utils/index.js";
+import {AppContext} from "../../../context/AppContext.js";
 import PostDetail from "../PostDetail.jsx";
+import {auth} from "../../../config/firebase.js";
 
 const StyledPostSingleCard = styled.div`
   margin: 1em 0;
@@ -69,31 +70,32 @@ const StyledPostSingleCard = styled.div`
       font-size: smaller;
     }
     
+    .buttons{
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 2;
 
+      button{
+        background-color: ${({theme}) => theme.colors.deepGreenBlue2};
+        color: ${({theme}) => theme.colors.lightGreen2};
+        padding: 0.3em 1em;
+        border-radius: 0.2em;
+        margin-top: 0.2em;
+      }
+    }
   }
 `
 
 
-function PostListSingleCard({post}) {
-    // {
-    //     "postCreator": "bZhM701orDcqDYGNSa9gtQs4Fjg1",
-    //     "description": "Cute",
-    //     "price": 0,
-    //     "petImage": "PostImage/5200.jpg34UgiDj6IX7zv0czbY80z",
-    //     "adoptable": true,
-    //     "petName": "Asol",
-    //     "createdAt": {
-    //         "seconds": 1685518480,
-    //         "nanoseconds": 873000000
-    //     },
-    //     "location": {
-    //         "latitude": 40.74958176387884,
-    //         "longitude": -73.79543272100697
-    //     },
-    //     "id": "pjtblMfUQFGNrz9B8KND"
-    // }
+function PostListSingleCard({post, isOwnPost}) {
     const [imageUrl, setImageUrl] = useState('')
-    const {addToTheList} = useContext(ListContext)
+    const {addToTheList, refreshPosts} = useContext(AppContext)
+    if(isOwnPost === undefined){
+        isOwnPost = auth?.currentUser?.uid === post.postCreator
+    }
 
     useEffect(()=>{
         getImageFromStorage(post.petImage)
@@ -119,7 +121,14 @@ function PostListSingleCard({post}) {
                 <p>
                     {post.description}
                 </p>
-
+                {isOwnPost
+                    ?
+                    <div className={'buttons'}>
+                        <button onClick={() => {
+                            deletePost(post.id)
+                            refreshPosts()
+                        }}>Delete</button>
+                    </div>: null}
             </div>
         </StyledPostSingleCard>
     );
