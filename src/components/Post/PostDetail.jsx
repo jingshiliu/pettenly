@@ -4,7 +4,7 @@ import {addDoc, collection, doc, getDoc, Timestamp} from "firebase/firestore";
 
 import {auth, db} from "../../config/firebase.js";
 import {getImageFromStorage} from "../../utils/index.js";
-import {ListContext} from "../../context/ListContext.js";
+import {AppContext} from "../../context/AppContext.js";
 import UserProfile from "../User/UserProfile.jsx";
 
 const StyledPostDetail = styled.div`
@@ -118,7 +118,7 @@ const StyledPostDetail = styled.div`
 function PostDetail({post}) {
     const [appointmentTime, setAppointmentTime] = useState('')
     const [petImage, setPetImage] = useState(null)
-    const {addToTheList} = useContext(ListContext)
+    const {addToTheList} = useContext(AppContext)
 
     useEffect(() => {
         const loadPetImage = async () => {

@@ -1,7 +1,6 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import styled from "styled-components";
-import {AuthContext} from "../../context/AuthContext.jsx";
-import {ListContext} from "../../context/ListContext.js";
+import {AppContext} from "../../context/AppContext.js";
 
 import {BsPlusLg} from "react-icons/bs"
 
@@ -31,7 +30,7 @@ const StyledPostCreateButton = styled.div`
 `
 
 function PostCreateButton({onClickInvokedUI}) {
-    const {addToTheList} = useContext(ListContext)
+    const {addToTheList} = useContext(AppContext)
     return (
         <StyledPostCreateButton>
             <button className={'postCreateButton'} onClick={() => addToTheList(onClickInvokedUI)}>

@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import UserProfile from "./UserProfile.jsx";
-import {ListContext} from "../../context/ListContext.js";
+import {AppContext} from "../../context/AppContext.js";
 import {doc, getDoc} from "firebase/firestore";
 import {auth, db} from "../../config/firebase.js";
 import {getImageFromStorage} from "../../utils/index.js";
@@ -23,9 +23,9 @@ const StyledUserProfilePreview = styled.div`
   }
 `
 
-function UserProfilePreview({logout}) {
+function UserProfilePreview() {
     const [profilePhotoUrl, setProfilePhotoUrl] = useState('')
-    const {addToTheList} = useContext(ListContext)
+    const {addToTheList} = useContext(AppContext)
 
     useEffect(()=>{
         loadImage()

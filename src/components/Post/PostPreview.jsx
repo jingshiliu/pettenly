@@ -1,8 +1,8 @@
-import React, {useContext, useEffect, useMemo, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import styled from "styled-components";
 import {AuthContext} from "../../context/AuthContext.jsx";
 import {getImageFromStorage} from "../../utils/index.js";
-import {ListContext} from "../../context/ListContext.js";
+import {AppContext} from "../../context/AppContext.js";
 import PostDetail from "./PostDetail.jsx";
 
 
@@ -23,7 +23,7 @@ const StyledPostPreview = styled.div`
 function PostPreview({post}) {
     const [imageUrl, setImageUrl] = useState('')
     const {isLoggedIn} = useContext(AuthContext)
-    const {addToTheList} = useContext(ListContext)
+    const {addToTheList} = useContext(AppContext)
 
     useEffect(()=>{
         getImage()

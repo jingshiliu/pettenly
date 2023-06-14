@@ -6,7 +6,7 @@ import {FiCheck} from 'react-icons/fi'
 import {doc, updateDoc} from "firebase/firestore";
 import {db, auth} from "../../config/firebase.js";
 import {getAppointments, getPosts, getUser, uploadFile} from "../../utils/index.js";
-import {ListContext} from "../../context/ListContext.js";
+import {AppContext} from "../../context/AppContext.js";
 import PostListAllCard from "../Post/PostListCard/PostListAllCard.jsx";
 import PostListSingleCard from "../Post/PostListCard/PostListSingleCard.jsx";
 
@@ -321,7 +321,8 @@ function UserProfile({updateProfilePreviewPhoto, userId}) {
     const [user, setUser] = useState({})
     const [posts, setPosts] = useState([])
     const [appointments, setAppointments] = useState([])
-    const {addToTheList} = useContext(ListContext)
+    const {addToTheList, refreshPosts} = useContext(AppContext)
+    console.log(addToTheList, refreshPosts)
 
     if (! userId) userId = auth?.currentUser?.uid
     const isOwnProfile = userId === auth?.currentUser?.uid

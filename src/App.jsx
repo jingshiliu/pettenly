@@ -4,7 +4,7 @@ import {collection, getDocs} from "firebase/firestore"
 import {auth, db} from "./config/firebase.js";
 
 import {AuthContext} from "./context/AuthContext.jsx";
-import {ListContext} from "./context/ListContext.js";
+import {AppContext} from "./context/AppContext.js";
 
 import Header from "./components/Header.jsx";
 import List from "./components/List/List.jsx";
@@ -186,7 +186,7 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <ListContext.Provider value={{addToTheList}}>
+            <AppContext.Provider value={{addToTheList: addToTheList, refreshPosts: getPosts}}>
                 <StyledApp>
                     <Header>
                         <div className="authContainer">
@@ -219,7 +219,7 @@ function App() {
                         </List>
                     </main>
                 </StyledApp>
-            </ListContext.Provider>
+            </AppContext.Provider>
         </ThemeProvider>
     )
 }
