@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import styled from "styled-components";
 import {addDoc, collection, doc, getDoc, Timestamp} from "firebase/firestore";
 
 import {auth, db} from "../../config/firebase.js";
 import {getImageFromStorage} from "../../utils/index.js";
+import {ListContext} from "../../context/ListContext.js";
+import UserProfile from "../User/UserProfile.jsx";
 
 const StyledPostDetail = styled.div`
   width: 19vw;
@@ -116,6 +118,7 @@ const StyledPostDetail = styled.div`
 function PostDetail({post}) {
     const [appointmentTime, setAppointmentTime] = useState('')
     const [petImage, setPetImage] = useState(null)
+    const {addToTheList} = useContext(ListContext)
 
     useEffect(() => {
         const loadPetImage = async () => {
@@ -165,7 +168,7 @@ function PostDetail({post}) {
                 <div className={'title'}>
                     <span>{post.petName}'s intro</span>
                     <div className={'buttons'}>
-                        <button>See Post Creator</button>
+                        <button onClick={()=> addToTheList(<UserProfile userId={post.postCreator}/>)}>See Post Creator</button>
                         <button>Chat</button>
                     </div>
                 </div>
