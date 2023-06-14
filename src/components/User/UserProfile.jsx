@@ -409,7 +409,7 @@ function UserProfile({updateProfilePreviewPhoto, userId}) {
                             isOwnProfile
                             ? posts.map(post =>
                                         <div className={'postCard'}>
-                                            <PostPreview key={nanoid()}
+                                            <PostPreview key={post.id}
                                                          post={post}
                                             />
                                             <span>
