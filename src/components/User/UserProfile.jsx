@@ -392,15 +392,19 @@ function UserProfile({updateProfilePreviewPhoto, userId}) {
             <div className="row second-row">
                 <div className={'postTitleContainer'}>
                     <h3>Posts</h3>
-                    <button
-                        onClick={() => addToTheList(<PostListAllCard
-                                                        postList={posts}
-                                                        userData={user}
-                                                    />)
-                        }
-                    >
-                        See All
-                    </button>
+                    {
+                        isOwnProfile
+                        ?
+                            <button
+                                onClick={() => addToTheList(<PostListAllCard
+                                    postList={posts}
+                                    userData={user}
+                                />)
+                                }
+                            >
+                                See All
+                            </button> : <></>
+                    }
                 </div>
                 <hr/>
                 <div className="postListContainer">
