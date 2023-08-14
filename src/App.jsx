@@ -16,6 +16,7 @@ import ListCard from "./components/List/ListCard.jsx";
 import {nanoid} from "nanoid";
 import DoubleCard from "./components/List/DoubleCard.jsx";
 import UserAuth from "./components/Auth/UserAuth.jsx";
+import Chat from "./components/Chat/Chat.jsx";
 
 
 const theme = {
@@ -64,7 +65,7 @@ const StyledApp = styled.div`
     }
   }
   
-  .refreshButton{
+  .button{
     font-size: 20px;
     height: 50px;
     text-align: center;
@@ -147,25 +148,26 @@ function App() {
             component,
             id: nanoid()
         }
-        if(isHalfSizeComponent){
-            for(let i = 0; i < theList.length; i++){
-                console.log(i)
-                const listElement = theList[i]
-                if(Array.isArray(listElement) && listElement.length < 2){
-                    setTheList([
-                        ...theList.slice(0, i),
-                        [...listElement, newListElement],
-                        ...theList.slice(i+1)
-                    ])
-                    return
-                }
-            }
+        if (!isHalfSizeComponent)
+            setTheList([...theList, newListElement])
+        else
+            addHalfSizeComponentToTheList(newListElement)
+    }
 
-            setTheList([...theList, [newListElement]])
-            return
+    function addHalfSizeComponentToTheList(newListElement){
+        for(let i = 0; i < theList.length; i++){
+            const listElement = theList[i]
+            if(Array.isArray(listElement) && listElement.length < 2){
+                setTheList([
+                    ...theList.slice(0, i),
+                    [...listElement, newListElement],
+                    ...theList.slice(i+1)
+                ])
+                return
+            }
         }
 
-        setTheList([...theList, newListElement])
+        setTheList([...theList, [newListElement]])
     }
 
     function logOutCleanUp(){
@@ -186,7 +188,10 @@ function App() {
                             isLoggedIn ?
                                 <>
                                     <PostCreateButton onClickInvokedUI={<PostCreator getPosts={getPosts}/>}/>
-                                    <button className={'refreshButton'} onClick={getPosts}>Refresh</button>
+                                    <button className={'button'} onClick={getPosts}>Refresh</button>
+                                    <button
+                                        className={'button'}
+                                        onClick={()=> addToTheList(<Chat/>)}>Chat</button>
                                 </>
                                 :<></>
                         }
