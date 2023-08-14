@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState} from 'react';
+import React, { useContext, useEffect, useState} from 'react';
 import styled, {ThemeProvider} from "styled-components";
 import {collection, getDocs} from "firebase/firestore"
 import {auth, db} from "./config/firebase.js";
@@ -16,7 +16,7 @@ import ListCard from "./components/List/ListCard.jsx";
 import {nanoid} from "nanoid";
 import DoubleCard from "./components/List/DoubleCard.jsx";
 import UserAuth from "./components/Auth/UserAuth.jsx";
-import Chat from "./components/Chat/Chat.jsx";
+import Messenger from "./components/Messenger/Messenger.jsx";
 
 
 const theme = {
@@ -191,7 +191,7 @@ function App() {
                                     <button className={'button'} onClick={getPosts}>Refresh</button>
                                     <button
                                         className={'button'}
-                                        onClick={()=> addToTheList(<Chat/>)}>Chat</button>
+                                        onClick={()=> addToTheList(<Messenger/>)}>Chat</button>
                                 </>
                                 :<></>
                         }
