@@ -8,7 +8,7 @@ import {AuthContext} from "../../context/AuthContext.jsx";
 import {getImageFromStorage, uploadFile} from "../../utils/index.js";
 import {FiCheck} from "react-icons/fi";
 import {BiCross} from 'react-icons/bi';
-import Map from "../Map.jsx";
+import Map from "../Map/Map.jsx";
 
 
 const StyledPostCreator = styled.div`

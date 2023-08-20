@@ -8,7 +8,7 @@ import {AppContext} from "./context/AppContext.js";
 
 import Header from "./components/Header.jsx";
 import List from "./components/List/List.jsx";
-import Map from "./components/Map.jsx";
+import Map from "./components/Map/Map.jsx";
 import PostCreateButton from "./components/Post/PostCreateButton.jsx";
 import PostCreator from "./components/Post/PostCreator.jsx";
 import PostPreview from "./components/Post/PostPreview.jsx";
