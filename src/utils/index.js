@@ -73,15 +73,7 @@ export async function getPosts(userId){
             orderBy('createdAt', 'desc')
         ))
 
-        const postsData = []
-        for(let post of postsSnapshot.docs){
-            postsData.push({
-                ...post.data(),
-                id: post.id
-            })
-        }
-
-        return postsData
+        return postsSnapshot.docs.map(post => ({...post.data(), id: post.id}))
     }catch (e){
         console.error(e)
     }
@@ -109,6 +101,27 @@ export async function getUser(userId){
             ...userData,
             image: profilePhotoUrl
         }
+    }catch (e){
+        console.error(e)
+    }
+}
+
+
+export async function getChatPreview(userId){
+    if(userId === undefined)
+        userId = auth?.currentUser?.uid
+
+    try{
+        const chatSnapShot = await getDocs(query(
+            collection(db, 'chat'),
+            or(
+                where('user1', '==', userId),
+                where('user2', '==', userId)
+            ),
+            orderBy('lastUpdate', 'desc')
+        ))
+        return chatSnapShot.docs.map(chat => ({...chat.data(), id:chat.id}))
+
     }catch (e){
         console.error(e)
     }
