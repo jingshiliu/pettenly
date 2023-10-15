@@ -1,7 +1,7 @@
 import {nanoid} from "nanoid";
 import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
 import {auth, db, storage} from "../config/firebase.js";
-import {collection, doc, getDoc, getDocs, orderBy, query, where, deleteDoc} from "firebase/firestore";
+import {collection, doc, getDoc, getDocs, orderBy, query, where, deleteDoc, or} from "firebase/firestore";
 
 export function fireStorageFilePostfix(){
     return nanoid()
@@ -107,7 +107,7 @@ export async function getUser(userId){
 }
 
 
-export async function getChatPreview(userId){
+export async function getChatPreviews(userId){
     if(userId === undefined)
         userId = auth?.currentUser?.uid
 
