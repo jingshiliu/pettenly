@@ -321,7 +321,6 @@ function UserProfile({updateProfilePreviewPhoto, userId}) {
     const [posts, setPosts] = useState([])
     const [appointments, setAppointments] = useState([])
     const {addToTheList, refreshPosts} = useContext(AppContext)
-    console.log(addToTheList, refreshPosts)
 
     if (! userId) userId = auth?.currentUser?.uid
     const isOwnProfile = userId === auth?.currentUser?.uid
