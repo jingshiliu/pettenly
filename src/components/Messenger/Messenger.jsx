@@ -4,6 +4,7 @@ import styled from "styled-components";
 import {getChatPreviews, getUser} from "../../utils/index.js";
 import {auth} from "../../config/firebase.js";
 import ChatPreview from "./ChatPreview.jsx";
+import Icon from "../Icon.jsx";
 
 const StyledChat = styled.div`
   width: 50vw;
@@ -15,15 +16,16 @@ const StyledChat = styled.div`
   color: ${({theme}) => theme.colors.lightGreen};
   display: flex;
   
-  .chatPreview{
+  .leftCol{
     width: 30%;
     
     h1{
       margin-bottom: 10px;
+      font-weight: normal;
     }
   }
   
-  .chat{
+  .chatContainer{
     width: 70%;
   }
 `
@@ -35,8 +37,6 @@ function Messenger() {
     const [chats, setChats] = useState({})
     const [currentChat, setCurrentChat] = useState({})
     const userId = auth?.currentUser?.uid
-    console.log(currentChat)
-
 
     useEffect(()=>{
         loadData()
@@ -64,18 +64,20 @@ function Messenger() {
 
     return (
         <StyledChat>
-            <section className={'chatPreview'}>
-                <h1>Messenger</h1>
-                {Object.values(chats).map(chat =>
-                    <ChatPreview
-                        receiverUserName={chat.receiverUserName}
-                        setCurrentChat={setCurrentChat}
-                        chatId={chat.id}
-                        key={chat.id}
-                    />
-                )}
+            <section className={'leftCol'}>
+                <h1><Icon /> Messenger</h1>
+                <div className="chatPreview">
+                    {Object.values(chats).map(chat =>
+                        <ChatPreview
+                            receiverUserName={chat.receiverUserName}
+                            setCurrentChat={setCurrentChat}
+                            chatId={chat.id}
+                            key={chat.id}
+                        />
+                    )}
+                </div>
             </section>
-            <section className={'chat'}>
+            <section className={'chatContainer'}>
 
             </section>
         </StyledChat>
