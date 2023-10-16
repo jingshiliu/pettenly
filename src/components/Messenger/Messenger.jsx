@@ -24,6 +24,10 @@ const StyledChat = styled.div`
       margin-bottom: 10px;
       font-weight: normal;
     }
+    
+    .ChatPreview{
+      margin-bottom: 5px;
+    }
   }
   
   .chatContainer{
@@ -36,11 +40,11 @@ function Messenger() {
     // when component first load, fetch all the chats of current user from firebase
     // sorted with the order of last updated
     const [chats, setChats] = useState({})
-    const [currentChat, setCurrentChat] = useState({})
+    const [currentChatId, setCurrentChatId] = useState('')
     const userId = auth?.currentUser?.uid
     const ChatComponent = useMemo(() => {
-        return <Chat chatId={currentChat}/>
-    }, [currentChat])
+        return <Chat chatId={currentChatId}/>
+    }, [currentChatId])
 
     useEffect(()=>{
         loadData()
@@ -63,7 +67,7 @@ function Messenger() {
             }
         }
         setChats(newChats)
-        setCurrentChat(newChats[chatPreviews[0].id])
+        setCurrentChatId(chatPreviews[0].id)
     }
 
     return (
@@ -74,7 +78,7 @@ function Messenger() {
                     {Object.values(chats).map(chat =>
                         <ChatPreview
                             receiverUserName={chat.receiverUserName}
-                            setCurrentChat={setCurrentChat}
+                            setCurrentChat={setCurrentChatId}
                             chatId={chat.id}
                             key={chat.id}
                         />
