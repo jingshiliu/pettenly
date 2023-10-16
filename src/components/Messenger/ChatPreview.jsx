@@ -7,6 +7,7 @@ const StyledChatPreview = styled.div`
   color: ${({theme}) => theme.colors.deepGreenBlue};
   padding: 20px 10px;
   border-radius: 0.5em;
+  box-sizing: border-box;
   :hover{
     filter: brightness(90%);
   }
