@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import styled from "styled-components";
 
 import {getChatPreviews, getUser} from "../../utils/index.js";
 import {auth} from "../../config/firebase.js";
 import ChatPreview from "./ChatPreview.jsx";
 import Icon from "../Icon.jsx";
+import Chat from "./Chat.jsx";
 
 const StyledChat = styled.div`
   width: 50vw;
@@ -37,6 +38,9 @@ function Messenger() {
     const [chats, setChats] = useState({})
     const [currentChat, setCurrentChat] = useState({})
     const userId = auth?.currentUser?.uid
+    const ChatComponent = useMemo(() => {
+        return <Chat chatId={currentChat}/>
+    }, [currentChat])
 
     useEffect(()=>{
         loadData()
@@ -78,7 +82,7 @@ function Messenger() {
                 </div>
             </section>
             <section className={'chatContainer'}>
-
+                {ChatComponent}
             </section>
         </StyledChat>
     );
