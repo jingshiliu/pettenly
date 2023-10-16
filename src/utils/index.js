@@ -1,7 +1,7 @@
 import {nanoid} from "nanoid";
 import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
 import {auth, db, storage} from "../config/firebase.js";
-import {collection, doc, getDoc, getDocs, orderBy, query, where, deleteDoc, or} from "firebase/firestore";
+import {collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, or, orderBy, query, where} from "firebase/firestore";
 
 export function fireStorageFilePostfix(){
     return nanoid()
@@ -122,6 +122,26 @@ export async function getChatPreviews(userId){
         ))
         return chatSnapShot.docs.map(chat => ({...chat.data(), id:chat.id}))
 
+    }catch (e){
+        console.error(e)
+    }
+}
+
+/***
+ *
+ * @param chatId
+ * @param func: func(messages) will be executed when receive an updates
+ * @returns {function} unsubscribe
+ */
+export function subscribeToMessageUpdates(chatId, func){
+    try{
+        return onSnapshot(query(
+            collection(db, 'chat', chatId, 'messages'),
+            orderBy('createdAt', 'desc')
+        ), (messagesSnapshot) => {
+            const messages = messagesSnapshot.map(message => ({...messagesSnapshot.data(), id: messagesSnapshot.id}))
+            func(messages)
+        })
     }catch (e){
         console.error(e)
     }
