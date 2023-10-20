@@ -37,6 +37,10 @@ const StyledApp = styled.div`
   width: 100vw;
   overflow: hidden;
   color: ${({theme})=> theme.colors.lightGreen} ;
+  
+  *{
+    font-family: 'Comic Sans MS', "Courier New", serif;
+  }
 
   main {
     position: relative;
