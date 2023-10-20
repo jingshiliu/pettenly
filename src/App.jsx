@@ -126,11 +126,9 @@ function App() {
 
     function createListRemoveFunction(index) {
         return function removeFromTheList(index2) {
-            console.log(index, index2)
             if(index2 !== undefined){
                 if(theList[index].length === 2){
                     const indexToKeep = index2 === 0? 1 : 0
-                    console.log(indexToKeep)
                     setTheList([
                         ...theList.slice(0, index),
                         [theList[index][indexToKeep]],

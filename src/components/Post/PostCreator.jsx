@@ -278,7 +278,6 @@ function PostCreator({getPosts}) {
                      setCenterCoordinate={(coord) =>{
                          setLat(coord.lat)
                          setLng(coord.lng)
-                         console.log(lat, lng)
                      }}
                 />
                 <div className={'crossIcon'}>
