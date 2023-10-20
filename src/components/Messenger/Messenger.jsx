@@ -17,6 +17,7 @@ const StyledChat = styled.div`
   color: ${({theme}) => theme.colors.lightGreen};
   display: flex;
   justify-content: space-between;
+  opacity: 0.95;
   
   .leftCol{
     width: 25%;
