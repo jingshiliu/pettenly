@@ -136,10 +136,10 @@ export async function getChatPreviews(userId){
 export function subscribeToMessageUpdates(chatId, func){
     try{
         return onSnapshot(query(
-            collection(db, 'chat', chatId, 'messages'),
+            collection(db, `chat/${chatId}/messages`),
             orderBy('createdAt', 'desc')
         ), (messagesSnapshot) => {
-            const messages = messagesSnapshot.map(message => ({...messagesSnapshot.data(), id: messagesSnapshot.id}))
+            const messages = messagesSnapshot.docs.map(message => ({...message.data(), id: message.id}))
             func(messages)
         })
     }catch (e){
