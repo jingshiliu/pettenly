@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from "styled-components";
 import {auth} from "../../config/firebase.js";
+import {AppContext} from "../../context/AppContext.js";
+import UserProfile from "../User/UserProfile.jsx";
 
 const StyledChatMessage = styled.div`
   img{
@@ -32,6 +34,8 @@ const StyledChatMessage = styled.div`
 `
 
 function ChatMessage({chatBuddy, message, user}) {
+    const {addToTheList} = useContext(AppContext)
+
     let Message;
     if(message.sender === user.id){
         Message = (
@@ -45,7 +49,7 @@ function ChatMessage({chatBuddy, message, user}) {
     }else{
         Message = (
             <div className={'chatBuddy messageBox'}>
-                <img src={chatBuddy.image} alt="Profile image of other people"/>
+                <img onClick={() => addToTheList(<UserProfile userId={chatBuddy.id}/>)} src={chatBuddy.image} alt="Profile image of other people"/>
                 <div className="messageContainer">
                     <span>{message.message}</span>
                 </div>
