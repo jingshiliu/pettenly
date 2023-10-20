@@ -16,9 +16,10 @@ const StyledChat = styled.div`
   padding: 20px;
   color: ${({theme}) => theme.colors.lightGreen};
   display: flex;
+  justify-content: space-between;
   
   .leftCol{
-    width: 30%;
+    width: 25%;
     
     h1{
       margin-bottom: 10px;
@@ -31,7 +32,7 @@ const StyledChat = styled.div`
   }
   
   .chatContainer{
-    width: 70%;
+    width: 73%;
   }
 `
 
@@ -42,9 +43,6 @@ function Messenger() {
     const [chats, setChats] = useState({})
     const [currentChatId, setCurrentChatId] = useState('')
     const userId = auth?.currentUser?.uid
-    const ChatComponent = useMemo(() => {
-        return <Chat chatId={currentChatId}/>
-    }, [currentChatId])
 
     useEffect(()=>{
         loadData()
@@ -86,7 +84,7 @@ function Messenger() {
                 </div>
             </section>
             <section className={'chatContainer'}>
-                {ChatComponent}
+                <Chat chatId={currentChatId}/>
             </section>
         </StyledChat>
     );
