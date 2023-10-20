@@ -48,7 +48,7 @@ function Messenger() {
         loadData()
             .catch(err => console.error(err))
         getUser()
-            .then(userInfo => setUser({...userInfo, id: auth.currentUser.uid}))
+            .then(userInfo => setUser(userInfo))
             .catch(err => console.error(err))
     }, [])
 
@@ -58,7 +58,6 @@ function Messenger() {
         for(let chatPreview of chatPreviews){
             let chatId = chatPreview.id
             let chatBuddyId = chatPreview.user1 === auth.currentUser.uid ? chatPreview.user2 : chatPreview.user1
-            console.log(chatBuddyId)
             let chatBuddy = await getUser(chatBuddyId)
             newChats[chatId] = {
                 ...chatPreview,
