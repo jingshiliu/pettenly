@@ -68,7 +68,6 @@ function Messenger() {
         setChats(newChats)
         setCurrentChatId(chatPreviews[0].id)
     }
-    console.log(chats)
 
     return (
         <StyledChat>
