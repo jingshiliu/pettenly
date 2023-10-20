@@ -4,7 +4,16 @@ import {subscribeToMessageUpdates} from "../../utils/index.js";
 import ChatMessage from "./ChatMessage.jsx";
 
 const StyledChat = styled.div`
+  h1{
+    font-weight: bolder;
 
+  }
+  .messagesContainer{
+    padding: 1em 0;
+    .ChatMessage{
+      margin-bottom: 1em;
+    }
+  }
 `
 
 function Chat({chatId, chatInfo, user}) {
@@ -24,17 +33,19 @@ function Chat({chatId, chatInfo, user}) {
 
     return (
         <StyledChat>
-            <h1>Hello, {chatId}</h1>
-            {
-                messages.map(message => {
-                    return <ChatMessage
-                                key={message.id}
-                                message={message}
-                                chatBuddy={chatInfo.chatBuddy}
-                                user={user}
-                           />
-                })
-            }
+            <h1>{chatInfo?.chatBuddy?.username}</h1>
+            <section className="messagesContainer">
+                {
+                    messages.map(message => {
+                        return <ChatMessage
+                            key={message.id}
+                            message={message}
+                            chatBuddy={chatInfo.chatBuddy}
+                            user={user}
+                        />
+                    })
+                }
+            </section>
         </StyledChat>
     );
 }
