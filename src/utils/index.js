@@ -99,7 +99,8 @@ export async function getUser(userId){
 
         return {
             ...userData,
-            image: profilePhotoUrl
+            image: profilePhotoUrl,
+            id: userId,
         }
     }catch (e){
         console.error(e)
