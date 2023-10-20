@@ -42,10 +42,13 @@ function Messenger() {
     // sorted with the order of last updated
     const [chats, setChats] = useState({})
     const [currentChatId, setCurrentChatId] = useState('')
-    const userId = auth?.currentUser?.uid
+    const [user, setUser] = useState({})
 
     useEffect(()=>{
         loadData()
+            .catch(err => console.error(err))
+        getUser()
+            .then(userInfo => setUser({...userInfo, id: auth.currentUser.uid}))
             .catch(err => console.error(err))
     }, [])
 
@@ -54,19 +57,18 @@ function Messenger() {
         const newChats = {}
         for(let chatPreview of chatPreviews){
             let chatId = chatPreview.id
-            let receiverId = chatPreview.user1 === userId ? chatPreview.user2 : chatPreview.user1
-            let receiver = await getUser(receiverId)
+            let chatBuddyId = chatPreview.user1 === auth.currentUser.uid ? chatPreview.user2 : chatPreview.user1
+            console.log(chatBuddyId)
+            let chatBuddy = await getUser(chatBuddyId)
             newChats[chatId] = {
                 ...chatPreview,
-                receiverId,
-                receiverEmail: receiver.email,
-                receiverImage: receiver.image,
-                receiverUserName: receiver.username
+                chatBuddy
             }
         }
         setChats(newChats)
         setCurrentChatId(chatPreviews[0].id)
     }
+    console.log(chats)
 
     return (
         <StyledChat>
@@ -75,7 +77,7 @@ function Messenger() {
                 <div className="chatPreview">
                     {Object.values(chats).map(chat =>
                         <ChatPreview
-                            receiverUserName={chat.receiverUserName}
+                            chatBuddyUserName={chat.chatBuddy.username}
                             setCurrentChat={setCurrentChatId}
                             chatId={chat.id}
                             key={chat.id}
@@ -84,7 +86,11 @@ function Messenger() {
                 </div>
             </section>
             <section className={'chatContainer'}>
-                <Chat chatId={currentChatId}/>
+                <Chat
+                    chatId={currentChatId}
+                    chatInfo={chats[currentChatId]}
+                    user={user}
+                />
             </section>
         </StyledChat>
     );

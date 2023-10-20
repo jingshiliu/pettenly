@@ -13,10 +13,10 @@ const StyledChatPreview = styled.div`
   }
 `
 
-function ChatPreview({receiverUserName, setCurrentChat, chatId}) {
+function ChatPreview({chatBuddyUserName, setCurrentChat, chatId}) {
     return (
         <StyledChatPreview className={'ChatPreview'} onClick={() => setCurrentChat(chatId) }>
-            {receiverUserName}
+            {chatBuddyUserName}
         </StyledChatPreview>
     );
 }
