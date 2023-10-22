@@ -29,6 +29,11 @@ const StyledChat = styled.div`
     
     .ChatPreview{
       margin-bottom: 5px;
+      
+      :first-child{
+        background-color: ${({theme}) => theme.colors.deepGreenBlue2};
+        color: ${({theme}) => theme.colors.lightGreen};
+      }
     }
   }
   
@@ -41,7 +46,7 @@ function Messenger() {
     // two columns, left for chat selection with diff user, right for current chat
     // when component first load, fetch all the chats of current user from firebase
     // sorted with the order of last updated
-    const [chats, setChats] = useState({})
+    const [chats, setChats] = useState([])
     const [currentChatId, setCurrentChatId] = useState('')
     const [user, setUser] = useState({})
 
@@ -55,18 +60,29 @@ function Messenger() {
 
     async function loadData(){
         const chatPreviews = await getChatPreviews()
-        const newChats = {}
+        const newChats = []
         for(let chatPreview of chatPreviews){
-            let chatId = chatPreview.id
             let chatBuddyId = chatPreview.user1 === auth.currentUser.uid ? chatPreview.user2 : chatPreview.user1
             let chatBuddy = await getUser(chatBuddyId)
-            newChats[chatId] = {
+
+            newChats.push({
                 ...chatPreview,
                 chatBuddy
-            }
+            })
         }
         setChats(newChats)
-        setCurrentChatId(chatPreviews[0].id)
+        setCurrentChatId(newChats[0].id)
+    }
+
+    function updateChat(chatId){
+        setCurrentChatId(chatId)
+        const newChats = [chats.find(chat => chat.id === chatId)]
+        for(let chat of chats){
+            if (chat.id === chatId)
+                continue
+            newChats.push(chat)
+        }
+        setChats(newChats)
     }
 
     return (
@@ -74,10 +90,10 @@ function Messenger() {
             <section className={'leftCol'}>
                 <h1><Icon /> Messenger</h1>
                 <div className="chatPreview">
-                    {Object.values(chats).map(chat =>
+                    {chats.map(chat =>
                         <ChatPreview
                             chatBuddyUserName={chat.chatBuddy.username}
-                            setCurrentChat={setCurrentChatId}
+                            updateChat={updateChat}
                             chatId={chat.id}
                             key={chat.id}
                         />
@@ -87,7 +103,7 @@ function Messenger() {
             <section className={'chatContainer'}>
                 <Chat
                     chatId={currentChatId}
-                    chatInfo={chats[currentChatId]}
+                    chatInfo={chats[0]}
                     user={user}
                 />
             </section>
