@@ -1,7 +1,20 @@
 import {nanoid} from "nanoid";
 import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
 import {auth, db, storage} from "../config/firebase.js";
-import {collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, or, orderBy, query, where} from "firebase/firestore";
+import {
+    addDoc,
+    collection,
+    deleteDoc,
+    doc,
+    getDoc,
+    getDocs,
+    onSnapshot,
+    or,
+    orderBy,
+    query,
+    Timestamp, updateDoc,
+    where
+} from "firebase/firestore";
 
 export function fireStorageFilePostfix(){
     return nanoid()
@@ -138,7 +151,7 @@ export function subscribeToMessageUpdates(chatId, func){
     try{
         return onSnapshot(query(
             collection(db, `chat/${chatId}/messages`),
-            orderBy('createdAt', 'desc')
+            orderBy('createdAt', 'asc')
         ), (messagesSnapshot) => {
             const messages = messagesSnapshot.docs.map(message => ({...message.data(), id: message.id}))
             func(messages)
@@ -146,4 +159,18 @@ export function subscribeToMessageUpdates(chatId, func){
     }catch (e){
         console.error(e)
     }
+}
+
+
+export function createChatMessage(chatId, message){
+    const curTime = Timestamp.now()
+
+    updateDoc(doc(db, `chat/${chatId}`), {lastUpdate: curTime})
+        .catch(err => console.error(err))
+
+    addDoc(collection(db, `chat/${chatId}/messages`), {
+        createdAt: curTime,
+        message,
+        sender: auth?.currentUser?.uid
+    }).catch(err => console.error(err))
 }

@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import styled from "styled-components";
-import {subscribeToMessageUpdates} from "../../utils/index.js";
+import {createChatMessage, subscribeToMessageUpdates} from "../../utils/index.js";
 import ChatMessage from "./ChatMessage.jsx";
 
 const StyledChat = styled.div`
@@ -66,6 +66,11 @@ function Chat({chatId, chatInfo, user}) {
         }
     }, [chatId])
 
+    function sendMessage(){
+        createChatMessage(chatId, messageRef.current.value)
+        messageRef.current.value = ''
+    }
+
     return (
         <StyledChat>
             <h1>{chatInfo?.chatBuddy?.username}</h1>
@@ -82,8 +87,18 @@ function Chat({chatId, chatInfo, user}) {
                 }
             </section>
             <section className="messageSender">
-                <textarea ref={messageRef} name="" id="" cols="30" rows="5" placeholder={'Type your message here'}/>
-                <button>Send</button>
+                                <textarea
+                                    ref={messageRef}
+                                    name="" id=""
+                                    cols="30" rows="5"
+                                    placeholder={'Type your message here'}
+                                    onKeyDown={e =>{
+                                        if(e.key === 'Enter') {
+                                            sendMessage()
+                                        }
+                                    }}
+                                />
+                <button onClick={sendMessage}>Send</button>
             </section>
         </StyledChat>
     );
