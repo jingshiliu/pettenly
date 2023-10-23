@@ -40,6 +40,17 @@ const StyledApp = styled.div`
   
   *{
     font-family: 'Comic Sans MS', "Courier New", serif;
+    scrollbar-color: ${({theme}) => theme.colors.deepGreenBlue2} transparent;
+    
+    ::-webkit-scrollbar{
+      background-color: transparent;
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-thumb{
+      background-color: ${({theme})=> theme.colors.deepGreenBlue2};
+      border-radius: 1em;
+    }
   }
 
   main {

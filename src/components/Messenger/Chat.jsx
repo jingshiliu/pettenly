@@ -13,6 +13,8 @@ const StyledChat = styled.div`
   .messagesContainer{
     padding: 1em 0;
     height: 75%;
+    overflow: scroll;
+    overflow-x: hidden;
     
     .ChatMessage{
       margin-bottom: 1em;
