@@ -5,6 +5,7 @@ import ChatMessage from "./ChatMessage.jsx";
 
 const StyledChat = styled.div`
   height: 100%;
+  position: relative;
   
   h1{
     font-weight: bolder;
@@ -23,6 +24,8 @@ const StyledChat = styled.div`
   
   .messageSender{
     width: 100%;
+    position: absolute;
+    bottom: 0;
     
     textarea{
       border: none;
