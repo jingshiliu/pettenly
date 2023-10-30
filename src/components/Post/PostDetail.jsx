@@ -3,9 +3,10 @@ import styled from "styled-components";
 import {addDoc, collection, doc, getDoc, Timestamp} from "firebase/firestore";
 
 import {auth, db} from "../../config/firebase.js";
-import {getImageFromStorage} from "../../utils/index.js";
+import {createAppointment, getImageFromStorage} from "../../utils/index.js";
 import {AppContext} from "../../context/AppContext.js";
 import UserProfile from "../User/UserProfile.jsx";
+import Messenger from "../Messenger/Messenger.jsx";
 
 const StyledPostDetail = styled.div`
   width: 19vw;
@@ -141,21 +142,7 @@ function PostDetail({post}) {
         const userDoc = await getDoc(doc(db, 'user', auth?.currentUser?.uid))
         const userName = userDoc.data().username
 
-
-        try {
-            await addDoc(collection(db, "appointment"), {
-                from: auth.currentUser.uid,
-                to: post.postCreator,
-                time: Timestamp.fromDate(new Date(appointmentTime)),
-                name: userName,
-                petName: post.petName,
-                status: 'pending',
-                message: ''
-            })
-            alert("Appointment Made")
-        } catch (e) {
-            console.error(e)
-        }
+        createAppointment(auth?.currentUser?.uid, post.postCreator, appointmentTime, userName, post.petName, 'pending', '')
     }
 
     return (
@@ -169,7 +156,7 @@ function PostDetail({post}) {
                     <span>{post.petName}'s intro</span>
                     <div className={'buttons'}>
                         <button onClick={()=> addToTheList(<UserProfile userId={post.postCreator}/>)}>See Post Creator</button>
-                        <button>Chat</button>
+                        <button onClick={()=> addToTheList(<Messenger newChatUserId={post.postCreator} />)}>Chat</button>
                     </div>
                 </div>
                 <hr/>

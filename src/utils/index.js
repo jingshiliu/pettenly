@@ -185,3 +185,17 @@ export function createNewChat(userId, userId2=auth?.currentUser?.uid){
         user2: userId2
     }).catch(err => console.error(err))
 }
+
+
+export function createAppointment(from, to, time, name, petName, status, message){
+    addDoc(collection(db, "appointment"), {
+        from,
+        to,
+        time: Timestamp.fromDate(new Date(time)),
+        name,
+        petName,
+        status,
+        message,
+    })  .then(()=> alert("Appointment Made"))
+        .catch(err => console.error(err))
+}

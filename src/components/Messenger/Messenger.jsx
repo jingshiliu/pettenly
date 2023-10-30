@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import styled from "styled-components";
 
-import {getChatPreviews, getUser} from "../../utils/index.js";
+import {createNewChat, getChatPreviews, getUser} from "../../utils/index.js";
 import {auth} from "../../config/firebase.js";
 import ChatPreview from "./ChatPreview.jsx";
 import Icon from "../Icon.jsx";
@@ -44,7 +44,7 @@ const StyledChat = styled.div`
   }
 `
 
-function Messenger() {
+function Messenger({newChatUserId}) {
     // two columns, left for chat selection with diff user, right for current chat
     // when component first load, fetch all the chats of current user from firebase
     // sorted with the order of last updated
@@ -61,6 +61,8 @@ function Messenger() {
     }, [])
 
     async function loadData(){
+        if(newChatUserId) await createNewChat(newChatUserId)
+
         const chatPreviews = await getChatPreviews()
         const newChats = []
         for(let chatPreview of chatPreviews){
