@@ -77,6 +77,7 @@ function Chat({chatId, chatInfo, user}) {
     }, [messages])
 
     function sendMessage(){
+        if(chatId, messageRef.current.value.length === 0) return
         createChatMessage(chatId, messageRef.current.value)
         messageRef.current.value = ''
     }
@@ -106,6 +107,7 @@ function Chat({chatId, chatInfo, user}) {
                                     placeholder={'Type your message here'}
                                     onKeyDown={e =>{
                                         if(e.key === 'Enter') {
+                                            e.preventDefault()
                                             sendMessage()
                                         }
                                     }}
