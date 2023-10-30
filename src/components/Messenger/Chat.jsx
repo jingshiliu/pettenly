@@ -20,6 +20,10 @@ const StyledChat = styled.div`
     .ChatMessage{
       margin-bottom: 1em;
     }
+    
+    h4{
+      text-align: center;
+    }
   }
   
   .messageSender{
@@ -87,6 +91,11 @@ function Chat({chatId, chatInfo, user}) {
             <h1>{chatInfo?.chatBuddy?.username}</h1>
             <hr/>
             <section className="messagesContainer">
+                {
+                    messages.length === 0 ? <>
+                        <h4>Say Hi To the Pet Poster</h4>
+                    </>: <></>
+                }
                 {
                     messages.map(message => {
                         return <ChatMessage
