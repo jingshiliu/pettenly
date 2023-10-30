@@ -35,7 +35,7 @@ const theme = {
 const StyledApp = styled.div`
   height: 100vh;
   width: 100vw;
-  overflow: hidden;
+  overflow: clip;
   color: ${({theme})=> theme.colors.lightGreen} ;
   
   *{
@@ -44,7 +44,7 @@ const StyledApp = styled.div`
     
     ::-webkit-scrollbar{
       background-color: transparent;
-      width: 8px;
+      width: 5px;
     }
     
     ::-webkit-scrollbar-thumb{
