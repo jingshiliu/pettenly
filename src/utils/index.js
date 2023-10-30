@@ -174,3 +174,14 @@ export function createChatMessage(chatId, message){
         sender: auth?.currentUser?.uid
     }).catch(err => console.error(err))
 }
+
+
+export function createNewChat(userId, userId2=auth?.currentUser?.uid){
+    const curTime = Timestamp.now()
+
+    addDoc(collection(db, 'chat'),{
+        lastUpdate: curTime,
+        user1: userId,
+        user2: userId2
+    }).catch(err => console.error(err))
+}
