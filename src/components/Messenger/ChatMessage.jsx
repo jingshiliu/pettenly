@@ -27,10 +27,6 @@ const StyledChatMessage = styled.div`
   .user{
     justify-content: end;
   }
-  
-  .chatBuddy{
-
-  }
 `
 
 function ChatMessage({chatBuddy, message, user}) {

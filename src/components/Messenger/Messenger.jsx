@@ -31,7 +31,9 @@ const StyledChat = styled.div`
       margin-bottom: 5px;
       
       :first-child{
-        background-color: ${({theme}) => theme.colors.deepGreenBlue2};
+        .background{
+          z-index: 3;
+        }
         color: ${({theme}) => theme.colors.lightGreen};
       }
     }
@@ -92,7 +94,7 @@ function Messenger() {
                 <div className="chatPreview">
                     {chats.map(chat =>
                         <ChatPreview
-                            chatBuddyUserName={chat.chatBuddy.username}
+                            chatBuddy={chat.chatBuddy}
                             updateChat={updateChat}
                             chatId={chat.id}
                             key={chat.id}
