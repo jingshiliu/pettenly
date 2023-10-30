@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState} from 'react';
+import React, { useContext, useEffect, useState} from 'react';
 import styled, {ThemeProvider} from "styled-components";
 import {collection, getDocs} from "firebase/firestore"
 import {auth, db} from "./config/firebase.js";
@@ -8,7 +8,7 @@ import {AppContext} from "./context/AppContext.js";
 
 import Header from "./components/Header.jsx";
 import List from "./components/List/List.jsx";
-import Map from "./components/Map.jsx";
+import Map from "./components/Map/Map.jsx";
 import PostCreateButton from "./components/Post/PostCreateButton.jsx";
 import PostCreator from "./components/Post/PostCreator.jsx";
 import PostPreview from "./components/Post/PostPreview.jsx";
@@ -16,6 +16,7 @@ import ListCard from "./components/List/ListCard.jsx";
 import {nanoid} from "nanoid";
 import DoubleCard from "./components/List/DoubleCard.jsx";
 import UserAuth from "./components/Auth/UserAuth.jsx";
+import Messenger from "./components/Messenger/Messenger.jsx";
 
 
 const theme = {
@@ -34,8 +35,23 @@ const theme = {
 const StyledApp = styled.div`
   height: 100vh;
   width: 100vw;
-  overflow: hidden;
+  overflow: clip;
   color: ${({theme})=> theme.colors.lightGreen} ;
+  
+  *{
+    font-family: 'Comic Sans MS', "Courier New", serif;
+    scrollbar-color: ${({theme}) => theme.colors.deepGreenBlue2} transparent;
+    
+    ::-webkit-scrollbar{
+      background-color: transparent;
+      width: 5px;
+    }
+    
+    ::-webkit-scrollbar-thumb{
+      background-color: ${({theme})=> theme.colors.deepGreenBlue2};
+      border-radius: 1em;
+    }
+  }
 
   main {
     position: relative;
@@ -64,7 +80,7 @@ const StyledApp = styled.div`
     }
   }
   
-  .refreshButton{
+  .button{
     font-size: 20px;
     height: 50px;
     text-align: center;
@@ -121,11 +137,9 @@ function App() {
 
     function createListRemoveFunction(index) {
         return function removeFromTheList(index2) {
-            console.log(index, index2)
             if(index2 !== undefined){
                 if(theList[index].length === 2){
                     const indexToKeep = index2 === 0? 1 : 0
-                    console.log(indexToKeep)
                     setTheList([
                         ...theList.slice(0, index),
                         [theList[index][indexToKeep]],
@@ -147,25 +161,26 @@ function App() {
             component,
             id: nanoid()
         }
-        if(isHalfSizeComponent){
-            for(let i = 0; i < theList.length; i++){
-                console.log(i)
-                const listElement = theList[i]
-                if(Array.isArray(listElement) && listElement.length < 2){
-                    setTheList([
-                        ...theList.slice(0, i),
-                        [...listElement, newListElement],
-                        ...theList.slice(i+1)
-                    ])
-                    return
-                }
-            }
+        if (!isHalfSizeComponent)
+            setTheList([...theList, newListElement])
+        else
+            addHalfSizeComponentToTheList(newListElement)
+    }
 
-            setTheList([...theList, [newListElement]])
-            return
+    function addHalfSizeComponentToTheList(newListElement){
+        for(let i = 0; i < theList.length; i++){
+            const listElement = theList[i]
+            if(Array.isArray(listElement) && listElement.length < 2){
+                setTheList([
+                    ...theList.slice(0, i),
+                    [...listElement, newListElement],
+                    ...theList.slice(i+1)
+                ])
+                return
+            }
         }
 
-        setTheList([...theList, newListElement])
+        setTheList([...theList, [newListElement]])
     }
 
     function logOutCleanUp(){
@@ -186,7 +201,10 @@ function App() {
                             isLoggedIn ?
                                 <>
                                     <PostCreateButton onClickInvokedUI={<PostCreator getPosts={getPosts}/>}/>
-                                    <button className={'refreshButton'} onClick={getPosts}>Refresh</button>
+                                    <button className={'button'} onClick={getPosts}>Refresh</button>
+                                    <button
+                                        className={'button'}
+                                        onClick={()=> addToTheList(<Messenger/>)}>Chat</button>
                                 </>
                                 :<></>
                         }

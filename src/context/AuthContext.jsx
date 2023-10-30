@@ -1,5 +1,4 @@
 import {createContext, useState} from "react";
-import {auth} from "../config/firebase.js";
 
 export const AuthContext = createContext({
     isLoggedIn: undefined,

@@ -250,12 +250,11 @@ const StyledUserProfile = styled.div`
       padding-top: 10px;
       width: 100%;
       height: 100%;
-      overflow-y: scroll;
+      overflow: hidden;
       
       .postsContainer{
         display: flex;
         width: 100%;
-        overflow: scroll;
 
         .PostPreview{
           width: 120px;
@@ -304,7 +303,7 @@ const StyledUserProfile = styled.div`
       flex-direction: column;
       align-items: center;
       height: 100%;
-      overflow: scroll;
+      overflow: hidden;
       
       hr{
         position: relative;
@@ -322,7 +321,6 @@ function UserProfile({updateProfilePreviewPhoto, userId}) {
     const [posts, setPosts] = useState([])
     const [appointments, setAppointments] = useState([])
     const {addToTheList, refreshPosts} = useContext(AppContext)
-    console.log(addToTheList, refreshPosts)
 
     if (! userId) userId = auth?.currentUser?.uid
     const isOwnProfile = userId === auth?.currentUser?.uid

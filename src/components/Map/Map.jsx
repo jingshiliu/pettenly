@@ -1,8 +1,8 @@
 import React from 'react';
 import GoogleMapReact from 'google-map-react'
-import googleMapCredential from '../credentials/google_map_credential.json'
+import googleMapCredential from '../../credentials/google_map_credential.json'
 import styled from "styled-components";
-import mapStyle from "../MapStyle.js";
+import mapStyle from "./MapStyle.js";
 
 
 const StyledMap = styled.div`
