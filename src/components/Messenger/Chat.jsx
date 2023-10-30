@@ -23,11 +23,11 @@ const StyledChat = styled.div`
   
   .messageSender{
     width: 100%;
-    position: relative;
     
     textarea{
       border: none;
       width: 100%;
+      max-height: 10%;
       padding: 0.8em 0.5em;
       box-sizing: border-box;
       border-radius: 1em;
@@ -55,6 +55,7 @@ const StyledChat = styled.div`
 function Chat({chatId, chatInfo, user}) {
     const [messages, setMessages] = useState([])
     const messageRef = useRef()
+    const messagesEndRef = useRef(null)
 
     useEffect(()=>{
         const unsubscribe = subscribeToMessageUpdates(chatId, newMessages =>{
@@ -68,6 +69,10 @@ function Chat({chatId, chatInfo, user}) {
         }
     }, [chatId])
 
+    useEffect(()=>{
+        messagesEndRef.current?.scrollIntoView({behavior: 'smooth'})
+    }, [messages])
+
     function sendMessage(){
         createChatMessage(chatId, messageRef.current.value)
         messageRef.current.value = ''
@@ -76,6 +81,7 @@ function Chat({chatId, chatInfo, user}) {
     return (
         <StyledChat>
             <h1>{chatInfo?.chatBuddy?.username}</h1>
+            <hr/>
             <section className="messagesContainer">
                 {
                     messages.map(message => {
@@ -87,6 +93,7 @@ function Chat({chatId, chatInfo, user}) {
                         />
                     })
                 }
+                <div ref={messagesEndRef}></div>
             </section>
             <section className="messageSender">
                                 <textarea
